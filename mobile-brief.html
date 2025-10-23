@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#00AEEF">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Daily Brief">
+  <meta name="mobile-web-app-capable" content="yes">
+  
+  <title>AeroVista Daily Brief - Mobile</title>
+  <meta name="description" content="Mobile-optimized daily brief builder with interactive task management for AeroVista LLC">
+  
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest.json">
+  
+  <!-- Apple Touch Icons -->
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' fill='%2300AEEF'/><text x='96' y='120' font-family='Arial' font-size='120' font-weight='bold' text-anchor='middle' fill='white'>A</text></svg>">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%2300AEEF'/><text x='16' y='22' font-family='Arial' font-size='20' font-weight='bold' text-anchor='middle' fill='white'>A</text></svg>">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      /* Mobile-Optimized Color System */
+      --bg: #0a0b0f;
+      --bg-secondary: #0d1117;
+      --panel: #0f1117;
+      --panel2: #161b22;
+      --panel3: #21262d;
+      --text: #f0f6fc;
+      --text-secondary: #c9d1d9;
+      --muted: #8b949e;
+      --muted-light: #6e7681;
+      --border: #30363d;
+      --border-light: #21262d;
+      --accent: #00AEEF;
+      --accent-hover: #79c0ff;
+      --accent2: #3fb950;
+      --accent2-hover: #56d364;
+      --gold: #f0b72f;
+      --danger: #f85149;
+      --success: #3fb950;
+      --warning: #d29922;
+      --info: #58a6ff;
+
+      /* Mobile Shadows */
+      --shadow-xs: 0 1px 2px rgba(0,0,0,.1);
+      --shadow-sm: 0 2px 4px rgba(0,0,0,.15);
+      --shadow: 0 4px 12px rgba(0,0,0,.2);
+      --shadow-md: 0 8px 24px rgba(0,0,0,.25);
+      --shadow-lg: 0 16px 48px rgba(0,0,0,.3);
+
+      /* Mobile Spacing */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 0.75rem;
+      --space-lg: 1rem;
+      --space-xl: 1.5rem;
+      --space-2xl: 2rem;
+
+      /* Mobile Typography */
+      --text-xs: 0.75rem;
+      --text-sm: 0.875rem;
+      --text-base: 1rem;
+      --text-lg: 1.125rem;
+      --text-xl: 1.25rem;
+      --text-2xl: 1.5rem;
+      --text-3xl: 1.75rem;
+
+      /* Mobile Border Radius */
+      --radius-sm: 0.375rem;
+      --radius: 0.5rem;
+      --radius-md: 0.75rem;
+      --radius-lg: 1rem;
+
+      /* Mobile Transitions */
+      --transition-fast: 150ms ease;
+      --transition: 250ms ease;
+      --transition-slow: 350ms ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+      min-height: 100vh;
+      min-height: 100dvh;
+    }
+
+    /* Mobile Tab Navigation */
+    .mobile-tab-nav {
+      position: sticky;
+      top: 0;
+      z-index: 99;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      padding: var(--space-sm) var(--space-md);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: var(--space-xs);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .nav-tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .nav-tab {
+      flex-shrink: 0;
+      padding: var(--space-sm) var(--space-md);
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: var(--text-sm);
+      font-weight: 500;
+      transition: all var(--transition-fast);
+      white-space: nowrap;
+    }
+
+    .nav-tab.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    .nav-tab:hover {
+      background: var(--panel2);
+      border-color: var(--accent);
+    }
+
+    .section {
+      margin-bottom: var(--space-xl);
+    }
+
+    .section-title {
+      font-size: var(--text-xl);
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: var(--space-md);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .section-icon {
+      font-size: 1.2em;
+    }
+
+    /* Mobile Cards */
+    .card {
+      background: var(--panel2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-md);
+      margin-bottom: var(--space-md);
+      transition: all var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      border-color: var(--accent);
+      box-shadow: var(--shadow);
+    }
+
+    .card.completed {
+      opacity: 0.7;
+      border-color: var(--success);
+    }
+
+    .card.in-progress {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px var(--accent);
+    }
+
+    .card.pending {
+      border-color: var(--warning);
+      box-shadow: 0 0 0 1px var(--warning);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: var(--space-sm);
+    }
+
+    .card-title {
+      font-size: var(--text-lg);
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.3;
+      flex: 1;
+      margin-right: var(--space-sm);
+    }
+
+    .card-status {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      font-size: var(--text-sm);
+      font-weight: 500;
+    }
+
+    .status-icon {
+      font-size: 1.1em;
+    }
+
+    .card-badges {
+      display: flex;
+      gap: var(--space-xs);
+      margin-bottom: var(--space-sm);
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--radius-full);
+      font-size: var(--text-xs);
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    .badge.time { background: rgba(255, 193, 7, 0.1); color: var(--warning); }
+    .badge.money { background: rgba(63, 185, 80, 0.1); color: var(--success); }
+    .badge.unblock { background: rgba(88, 166, 255, 0.1); color: var(--info); }
+
+    .card-content {
+      color: var(--text-secondary);
+      font-size: var(--text-sm);
+      line-height: 1.5;
+      margin-bottom: var(--space-md);
+    }
+
+    .card-actions {
+      display: flex;
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+    }
+
+    .btn {
+      padding: var(--space-sm) var(--space-md);
+      border: none;
+      border-radius: var(--radius);
+      font-size: var(--text-sm);
+      font-weight: 500;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      text-decoration: none;
+      min-height: 44px;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+      border: 1px solid var(--accent);
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
+    }
+
+    .btn-secondary {
+      background: var(--panel3);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--panel2);
+      border-color: var(--accent);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: white;
+      border: 1px solid var(--success);
+    }
+
+    .btn-success:hover {
+      background: var(--accent2-hover);
+    }
+
+    /* Mobile Forms */
+    .form-group {
+      margin-bottom: var(--space-md);
+    }
+
+    .form-label {
+      display: block;
+      font-size: var(--text-sm);
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: var(--space-xs);
+    }
+
+    .form-input, .form-textarea, .form-select {
+      width: 100%;
+      padding: var(--space-md);
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-size: var(--text-base);
+      transition: all var(--transition-fast);
+      min-height: 44px;
+    }
+
+    .form-input:focus, .form-textarea:focus, .form-select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(0, 174, 239, 0.2);
+    }
+
+    .form-textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    /* Mobile Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: var(--space-md);
+    }
+
+    .modal {
+      background: var(--panel2);
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      width: 100%;
+      max-width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+
+    .modal-header {
+      padding: var(--space-md);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-title {
+      font-size: var(--text-lg);
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: none;
+      color: var(--muted);
+      cursor: pointer;
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-body {
+      padding: var(--space-md);
+    }
+
+    .modal-footer {
+      padding: var(--space-md);
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: var(--space-sm);
+    }
+
+    /* Mobile Stats */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-md);
+      margin-bottom: var(--space-xl);
+    }
+
+    .stat-card {
+      background: var(--panel2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-md);
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: var(--text-2xl);
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: var(--space-xs);
+    }
+
+    .stat-label {
+      font-size: var(--text-sm);
+      color: var(--muted);
+    }
+
+    /* Mobile Quick Actions */
+    .quick-actions {
+      position: fixed;
+      bottom: var(--space-md);
+      right: var(--space-md);
+      z-index: 50;
+    }
+
+    .fab {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      box-shadow: var(--shadow-lg);
+      transition: all var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .fab:hover {
+      transform: scale(1.1);
+      box-shadow: var(--shadow-xl);
+    }
+
+    .fab:active {
+      transform: scale(0.95);
+    }
+
+    /* Mobile Animations */
+    .fade-in {
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .slide-in {
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(-100%); }
+      to { transform: translateX(0); }
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 480px) {
+      .mobile-content {
+        padding: var(--space-sm);
+      }
+      
+      .card {
+        padding: var(--space-sm);
+      }
+      
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Touch Optimizations */
+    .touch-target {
+      min-height: 44px;
+      min-width: 44px;
+    }
+
+    /* Hide scrollbars on mobile */
+    .scroll-hide {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .scroll-hide::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Mobile Focus States */
+    .btn:focus, .btn-icon:focus, .fab:focus {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    /* Mobile Selection */
+    ::selection {
+      background: var(--accent);
+      color: white;
+    }
+
+    /* Mobile Loading States */
+    .loading {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--border);
+      border-top: 2px solid var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Streamlined Navigation Header -->
+  <div id="aerovista-header"></div>
+
+  <!-- Mobile Tab Navigation -->
+  <nav class="mobile-tab-nav">
+    <div class="nav-tabs">
+      <a href="#brief" class="nav-tab active" data-tab="brief">📋 Brief</a>
+      <a href="#tasks" class="nav-tab" data-tab="tasks">✅ Tasks</a>
+      <a href="#stats" class="nav-tab" data-tab="stats">📊 Stats</a>
+      <a href="#add" class="nav-tab" data-tab="add">➕ Add</a>
+    </div>
+  </nav>
+
+  <!-- Mobile Content -->
+  <main class="mobile-content">
+    <!-- Brief Tab -->
+    <div id="brief-tab" class="tab-content active">
+      <div class="section">
+        <h2 class="section-title">
+          <span class="section-icon">🌅</span>
+          Today's Brief
+        </h2>
+        <div id="brief-content">
+          <!-- Brief content will be loaded here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Tasks Tab -->
+    <div id="tasks-tab" class="tab-content">
+      <div class="section">
+        <h2 class="section-title">
+          <span class="section-icon">✅</span>
+          Your Tasks
+        </h2>
+        <div id="tasks-content">
+          <!-- Tasks will be loaded here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Tab -->
+    <div id="stats-tab" class="tab-content">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number" id="completed-count">0</div>
+          <div class="stat-label">Completed</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="pending-count">0</div>
+          <div class="stat-label">Pending</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="in-progress-count">0</div>
+          <div class="stat-label">In Progress</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="total-count">0</div>
+          <div class="stat-label">Total Tasks</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Tab -->
+    <div id="add-tab" class="tab-content">
+      <div class="section">
+        <h2 class="section-title">
+          <span class="section-icon">➕</span>
+          Add New Task
+        </h2>
+        <form id="add-task-form">
+          <div class="form-group">
+            <label class="form-label">Task Title</label>
+            <input type="text" class="form-input" id="task-title" placeholder="Enter task title..." required>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Description</label>
+            <textarea class="form-textarea" id="task-description" placeholder="Enter task description..."></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Priority</label>
+            <select class="form-select" id="task-priority">
+              <option value="low">🟢 Low</option>
+              <option value="medium" selected>🟡 Medium</option>
+              <option value="high">🔴 High</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Due Date</label>
+            <input type="datetime-local" class="form-input" id="task-due-date">
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Tags</label>
+            <div class="card-badges">
+              <label class="badge time">
+                <input type="checkbox" id="tag-time" value="time">
+                ⏱️ Time
+              </label>
+              <label class="badge money">
+                <input type="checkbox" id="tag-money" value="money">
+                💵 Money
+              </label>
+              <label class="badge unblock">
+                <input type="checkbox" id="tag-unblock" value="unblock">
+                🧩 Unblock
+              </label>
+            </div>
+          </div>
+          
+          <div class="card-actions">
+            <button type="submit" class="btn btn-primary">
+              <span>➕</span> Add Task
+            </button>
+            <button type="button" class="btn btn-secondary" id="cancel-add">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <!-- Quick Action FAB -->
+  <div class="quick-actions">
+    <button class="fab" id="add-task-fab" title="Add Task">
+      <span>➕</span>
+    </button>
+  </div>
+
+  <!-- Add Task Modal -->
+  <div id="add-task-modal" class="modal-overlay" style="display: none;">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 class="modal-title">Add New Task</h3>
+        <button class="modal-close" id="close-modal">
+          <span>✕</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="modal-add-task-form">
+          <div class="form-group">
+            <label class="form-label">Task Title</label>
+            <input type="text" class="form-input" id="modal-task-title" placeholder="Enter task title..." required>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Description</label>
+            <textarea class="form-textarea" id="modal-task-description" placeholder="Enter task description..."></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Priority</label>
+            <select class="form-select" id="modal-task-priority">
+              <option value="low">🟢 Low</option>
+              <option value="medium" selected>🟡 Medium</option>
+              <option value="high">🔴 High</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Due Date</label>
+            <input type="datetime-local" class="form-input" id="modal-task-due-date">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="modal-cancel">Cancel</button>
+          <button type="submit" class="btn btn-primary">Add Task</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="shared-utils.js"></script>
+  <script src="accessibility-utils.js"></script>
+  <script src="calendar-utils.js"></script>
+  <script src="navigation-utils.js"></script>
+  <script>
+    // ====== Mobile PWA App ======
+    class MobileBriefApp {
+      constructor() {
+        this.data = window.AeroVistaData.data;
+        this.currentTab = 'brief';
+        this.init();
+      }
+
+      init() {
+        this.setupEventListeners();
+        this.setupServiceWorker();
+        this.render();
+        this.updateStats();
+      }
+
+      setupEventListeners() {
+        // Tab navigation
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+          tab.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.switchTab(tab.dataset.tab);
+          });
+        });
+
+        // FAB and modal
+        document.getElementById('add-task-fab').addEventListener('click', () => {
+          this.switchTab('add');
+        });
+
+        document.getElementById('close-modal').addEventListener('click', () => {
+          this.closeModal();
+        });
+
+        document.getElementById('modal-cancel').addEventListener('click', () => {
+          this.closeModal();
+        });
+
+        // Forms
+        document.getElementById('add-task-form').addEventListener('submit', (e) => {
+          e.preventDefault();
+          this.addTask();
+        });
+
+        // Task interactions
+        document.addEventListener('click', (e) => {
+          if (e.target.classList.contains('task-toggle')) {
+            this.toggleTask(e.target.dataset.taskId);
+          }
+          if (e.target.classList.contains('task-delete')) {
+            this.deleteTask(e.target.dataset.taskId);
+          }
+        });
+      }
+
+      setupServiceWorker() {
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('sw.js')
+            .then(registration => {
+              console.log('SW registered:', registration);
+            })
+            .catch(error => {
+              console.log('SW registration failed:', error);
+            });
+        }
+      }
+
+      switchTab(tabName) {
+        // Update nav tabs
+        document.querySelectorAll('.nav-tab').forEach(tab => {
+          tab.classList.remove('active');
+        });
+        document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+
+        // Update content
+        document.querySelectorAll('.tab-content').forEach(content => {
+          content.classList.remove('active');
+        });
+        document.getElementById(`${tabName}-tab`).classList.add('active');
+
+        this.currentTab = tabName;
+
+        if (tabName === 'brief') {
+          this.renderBrief();
+        } else if (tabName === 'tasks') {
+          this.renderTasks();
+        } else if (tabName === 'stats') {
+          this.updateStats();
+        }
+      }
+
+      render() {
+        this.renderBrief();
+        this.renderTasks();
+        this.updateStats();
+      }
+
+      renderBrief() {
+        const briefContent = document.getElementById('brief-content');
+        const now = new Date();
+        const timeContext = now.getHours() < 12 ? 'morning' : now.getHours() < 17 ? 'afternoon' : 'evening';
+        
+        const topTasks = this.getTopTasks(5);
+        const alerts = this.getAlerts();
+        
+        briefContent.innerHTML = `
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">🌅 ${timeContext.charAt(0).toUpperCase() + timeContext.slice(1)} Brief</h3>
+              <div class="card-status">
+                <span class="status-icon">📅</span>
+                <span>${now.toLocaleDateString()}</span>
+              </div>
+            </div>
+            <div class="card-content">
+              <p>Here's your intelligently ranked task list for today. Focus on the highest priority items first.</p>
+            </div>
+          </div>
+          
+          ${topTasks.map(task => this.renderTaskCard(task)).join('')}
+          
+          ${alerts.length > 0 ? `
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">⚠️ Alerts</h3>
+                <div class="card-status">
+                  <span class="status-icon">🚨</span>
+                  <span>${alerts.length} items</span>
+                </div>
+              </div>
+              <div class="card-content">
+                ${alerts.map(alert => `<p>• ${alert}</p>`).join('')}
+              </div>
+            </div>
+          ` : ''}
+        `;
+      }
+
+      renderTasks() {
+        const tasksContent = document.getElementById('tasks-content');
+        const tasks = this.getTasksByStatus();
+        
+        tasksContent.innerHTML = `
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">✅ Completed Tasks</h3>
+              <div class="card-status">
+                <span class="status-icon">✅</span>
+                <span>${tasks.completed.length}</span>
+              </div>
+            </div>
+            <div class="card-content">
+              ${tasks.completed.length > 0 ? 
+                tasks.completed.map(task => this.renderTaskItem(task)).join('') :
+                '<p>No completed tasks yet.</p>'
+              }
+            </div>
+          </div>
+          
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">▶️ In Progress</h3>
+              <div class="card-status">
+                <span class="status-icon">▶️</span>
+                <span>${tasks.inProgress.length}</span>
+              </div>
+            </div>
+            <div class="card-content">
+              ${tasks.inProgress.length > 0 ? 
+                tasks.inProgress.map(task => this.renderTaskItem(task)).join('') :
+                '<p>No tasks in progress.</p>'
+              }
+            </div>
+          </div>
+          
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">⏳ Pending</h3>
+              <div class="card-status">
+                <span class="status-icon">⏳</span>
+                <span>${tasks.pending.length}</span>
+              </div>
+            </div>
+            <div class="card-content">
+              ${tasks.pending.length > 0 ? 
+                tasks.pending.map(task => this.renderTaskItem(task)).join('') :
+                '<p>No pending tasks.</p>'
+              }
+            </div>
+          </div>
+        `;
+      }
+
+      renderTaskCard(task) {
+        const statusClass = task.status || 'pending';
+        const statusIcon = this.getStatusIcon(task.status);
+        
+        return `
+          <div class="card ${statusClass} fade-in">
+            <div class="card-header">
+              <h3 class="card-title">${statusIcon} ${task.title}</h3>
+              <div class="card-status">
+                <span class="status-icon">${this.getPriorityIcon(task.priority)}</span>
+                <span>${task.priority}</span>
+              </div>
+            </div>
+            <div class="card-badges">
+              ${task.tags.map(tag => `<span class="badge ${tag}">${this.getTagIcon(tag)} ${tag}</span>`).join('')}
+            </div>
+            <div class="card-content">
+              <p>${task.description || task.dod}</p>
+            </div>
+            <div class="card-actions">
+              <button class="btn btn-success task-toggle" data-task-id="${task.id}">
+                <span>✅</span> Complete
+              </button>
+              <button class="btn btn-secondary task-delete" data-task-id="${task.id}">
+                <span>🗑️</span> Delete
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      renderTaskItem(task) {
+        const statusIcon = this.getStatusIcon(task.status);
+        
+        return `
+          <div class="card ${task.status} fade-in">
+            <div class="card-header">
+              <h3 class="card-title">${statusIcon} ${task.title}</h3>
+              <div class="card-status">
+                <span class="status-icon">${this.getPriorityIcon(task.priority)}</span>
+                <span>${task.priority}</span>
+              </div>
+            </div>
+            <div class="card-content">
+              <p>${task.description || task.dod}</p>
+            </div>
+            <div class="card-actions">
+              <button class="btn btn-success task-toggle" data-task-id="${task.id}">
+                <span>✅</span> Complete
+              </button>
+              <button class="btn btn-secondary task-delete" data-task-id="${task.id}">
+                <span>🗑️</span> Delete
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      addTask() {
+        const title = document.getElementById('task-title').value;
+        const description = document.getElementById('task-description').value;
+        const priority = document.getElementById('task-priority').value;
+        const dueDate = document.getElementById('task-due-date').value;
+        
+        const tags = [];
+        if (document.getElementById('tag-time').checked) tags.push('time');
+        if (document.getElementById('tag-money').checked) tags.push('money');
+        if (document.getElementById('tag-unblock').checked) tags.push('unblock');
+        
+        const task = {
+          title,
+          description,
+          priority,
+          dueDate: dueDate ? new Date(dueDate).toISOString() : null,
+          tags,
+          status: 'pending'
+        };
+        
+        // Use shared data manager
+        const result = window.AeroVistaData.addTask(task);
+        if (result.success) {
+          this.data = window.AeroVistaData.data; // Refresh data reference
+          this.render();
+          this.updateStats();
+          
+          // Clear form
+          document.getElementById('add-task-form').reset();
+          
+          // Show success message
+          this.showToast('Task added successfully!', 'success');
+        } else {
+          this.showToast(`Error: ${result.error}`, 'error');
+        }
+      }
+
+      toggleTask(taskId) {
+        // Use shared data manager
+        const result = window.AeroVistaData.toggleTaskStatus(taskId);
+        if (result.success) {
+          this.data = window.AeroVistaData.data; // Refresh data reference
+          this.render();
+          this.updateStats();
+          
+          this.showToast(
+            result.task.status === 'completed' ? 'Task completed!' : 'Task marked as pending',
+            'success'
+          );
+        } else {
+          this.showToast(`Error: ${result.error}`, 'error');
+        }
+      }
+
+      deleteTask(taskId) {
+        if (confirm('Are you sure you want to delete this task?')) {
+          // Use shared data manager
+          const result = window.AeroVistaData.deleteTask(taskId);
+          if (result.success) {
+            this.data = window.AeroVistaData.data; // Refresh data reference
+            this.render();
+            this.updateStats();
+            
+            this.showToast('Task deleted!', 'success');
+          } else {
+            this.showToast(`Error: ${result.error}`, 'error');
+          }
+        }
+      }
+
+      updateStats() {
+        const tasks = this.data.tasks;
+        const completed = tasks.filter(t => t.status === 'completed').length;
+        const pending = tasks.filter(t => t.status === 'pending').length;
+        const inProgress = tasks.filter(t => t.status === 'in-progress').length;
+        const total = tasks.length;
+        
+        document.getElementById('completed-count').textContent = completed;
+        document.getElementById('pending-count').textContent = pending;
+        document.getElementById('in-progress-count').textContent = inProgress;
+        document.getElementById('total-count').textContent = total;
+      }
+
+      getTopTasks(limit = 5) {
+        return this.data.tasks
+          .filter(t => t.status !== 'completed')
+          .sort((a, b) => this.getTaskPriority(b) - this.getTaskPriority(a))
+          .slice(0, limit);
+      }
+
+      getTaskPriority(task) {
+        let priority = 0;
+        if (task.priority === 'high') priority += 3;
+        else if (task.priority === 'medium') priority += 2;
+        else priority += 1;
+        
+        if (task.tags.includes('time')) priority += 2;
+        if (task.tags.includes('money')) priority += 2;
+        if (task.tags.includes('unblock')) priority += 1;
+        
+        return priority;
+      }
+
+      getTasksByStatus() {
+        const tasks = this.data.tasks;
+        return {
+          completed: tasks.filter(t => t.status === 'completed'),
+          inProgress: tasks.filter(t => t.status === 'in-progress'),
+          pending: tasks.filter(t => t.status === 'pending')
+        };
+      }
+
+      getAlerts() {
+        const now = new Date();
+        const alerts = [];
+        
+        this.data.tasks.forEach(task => {
+          if (task.dueDate && new Date(task.dueDate) < now && task.status !== 'completed') {
+            alerts.push(`${task.title} is overdue`);
+          }
+        });
+        
+        return alerts;
+      }
+
+      getStatusIcon(status) {
+        const icons = {
+          'completed': '✅',
+          'in-progress': '▶️',
+          'pending': '⏳',
+          'backlog': '📦'
+        };
+        return icons[status] || '📋';
+      }
+
+      getPriorityIcon(priority) {
+        const icons = {
+          'high': '🔴',
+          'medium': '🟡',
+          'low': '🟢'
+        };
+        return icons[priority] || '⚪';
+      }
+
+      getTagIcon(tag) {
+        const icons = {
+          'time': '⏱️',
+          'money': '💵',
+          'unblock': '🧩'
+        };
+        return icons[tag] || '🏷️';
+      }
+
+      closeModal() {
+        document.getElementById('add-task-modal').style.display = 'none';
+      }
+
+      showToast(message, type = 'info') {
+        // Simple toast notification
+        const toast = document.createElement('div');
+        toast.style.cssText = `
+          position: fixed;
+          top: 20px;
+          left: 50%;
+          transform: translateX(-50%);
+          background: var(--panel2);
+          color: var(--text);
+          padding: 12px 24px;
+          border-radius: 8px;
+          border: 1px solid var(--border);
+          z-index: 1001;
+          font-size: 14px;
+          font-weight: 500;
+        `;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+          toast.remove();
+        }, 3000);
+      }
+
+    }
+
+    // Initialize the app
+    document.addEventListener('DOMContentLoaded', () => {
+      new MobileBriefApp();
+      
+      // Initialize streamlined navigation
+      if (window.AeroVistaNav) {
+        window.AeroVistaNav.init();
+        
+        // Inject navigation components
+        const headerContainer = document.getElementById('aerovista-header');
+        if (headerContainer) {
+          headerContainer.innerHTML = window.generateHeader() + window.generateStatusBar();
+        }
+      }
+    });
+
+    // PWA Install prompt
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      
+      // Show install button
+      const installBtn = document.createElement('button');
+      installBtn.textContent = 'Install App';
+      installBtn.className = 'btn btn-primary';
+      installBtn.style.cssText = 'position: fixed; bottom: 80px; right: 16px; z-index: 100;';
+      
+      installBtn.addEventListener('click', async () => {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          const { outcome } = await deferredPrompt.userChoice;
+          console.log(`User response to the install prompt: ${outcome}`);
+          deferredPrompt = null;
+          installBtn.remove();
+        }
+      });
+      
+      document.body.appendChild(installBtn);
+    });
+
+    // Handle app installed
+    window.addEventListener('appinstalled', () => {
+      console.log('PWA was installed');
+    });
+  </script>
+</body>
+</html>

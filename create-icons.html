@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Icon Generator</title>
+</head>
+<body>
+    <canvas id="canvas" width="512" height="512" style="border: 1px solid #ccc;"></canvas>
+    <br><br>
+    <button onclick="generateIcons()">Generate Icons</button>
+    <div id="downloads"></div>
+
+    <script>
+        function generateIcons() {
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            const downloads = document.getElementById('downloads');
+            
+            // Clear downloads
+            downloads.innerHTML = '';
+            
+            const sizes = [16, 32, 48, 72, 96, 128, 144, 152, 192, 384, 512];
+            
+            sizes.forEach(size => {
+                // Create new canvas for this size
+                const iconCanvas = document.createElement('canvas');
+                iconCanvas.width = size;
+                iconCanvas.height = size;
+                const iconCtx = iconCanvas.getContext('2d');
+                
+                // Background
+                iconCtx.fillStyle = '#0a0b0f';
+                iconCtx.fillRect(0, 0, size, size);
+                
+                // Gradient background
+                const gradient = iconCtx.createLinearGradient(0, 0, size, size);
+                gradient.addColorStop(0, '#00AEEF');
+                gradient.addColorStop(1, '#1f6feb');
+                iconCtx.fillStyle = gradient;
+                iconCtx.fillRect(0, 0, size, size);
+                
+                // AeroVista "A" logo
+                iconCtx.fillStyle = 'white';
+                iconCtx.font = `bold ${size * 0.6}px Arial`;
+                iconCtx.textAlign = 'center';
+                iconCtx.textBaseline = 'middle';
+                iconCtx.fillText('A', size/2, size/2);
+                
+                // Add subtle glow effect
+                iconCtx.shadowColor = '#00AEEF';
+                iconCtx.shadowBlur = size * 0.1;
+                iconCtx.fillText('A', size/2, size/2);
+                
+                // Download link
+                const link = document.createElement('a');
+                link.download = `icon-${size}x${size}.png`;
+                link.href = iconCanvas.toDataURL();
+                link.textContent = `Download ${size}x${size}`;
+                link.style.display = 'block';
+                link.style.margin = '5px 0';
+                downloads.appendChild(link);
+            });
+        }
+    </script>
+</body>
+</html>
+

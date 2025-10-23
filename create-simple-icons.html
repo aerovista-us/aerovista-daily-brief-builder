@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Icon Creator</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .icon-preview { display: inline-block; margin: 10px; border: 1px solid #ccc; }
+        .download-btn { display: block; margin: 5px 0; padding: 5px 10px; background: #007bff; color: white; text-decoration: none; border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <h1>AeroVista PWA Icon Generator</h1>
+    <p>Click "Generate Icons" to create all required PWA icons:</p>
+    
+    <button onclick="generateAllIcons()" style="padding: 10px 20px; font-size: 16px; background: #00AEEF; color: white; border: none; border-radius: 5px; cursor: pointer;">Generate Icons</button>
+    
+    <div id="icons-container"></div>
+
+    <script>
+        function generateAllIcons() {
+            const container = document.getElementById('icons-container');
+            container.innerHTML = '';
+            
+            const sizes = [16, 32, 48, 72, 96, 128, 144, 152, 192, 384, 512];
+            
+            sizes.forEach(size => {
+                const canvas = document.createElement('canvas');
+                canvas.width = size;
+                canvas.height = size;
+                const ctx = canvas.getContext('2d');
+                
+                // Background gradient
+                const gradient = ctx.createLinearGradient(0, 0, size, size);
+                gradient.addColorStop(0, '#00AEEF');
+                gradient.addColorStop(1, '#1f6feb');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, size, size);
+                
+                // AeroVista "A" logo
+                ctx.fillStyle = 'white';
+                ctx.font = `bold ${size * 0.6}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('A', size/2, size/2);
+                
+                // Add subtle glow
+                ctx.shadowColor = '#00AEEF';
+                ctx.shadowBlur = size * 0.1;
+                ctx.fillText('A', size/2, size/2);
+                
+                // Create preview
+                const preview = document.createElement('div');
+                preview.className = 'icon-preview';
+                preview.innerHTML = `
+                    <div style="text-align: center;">
+                        <div style="display: inline-block; border: 1px solid #ddd; margin: 5px;">
+                            ${canvas.toDataURL()}
+                        </div>
+                        <br>
+                        <a href="${canvas.toDataURL()}" download="icon-${size}x${size}.png" class="download-btn">
+                            Download ${size}x${size}
+                        </a>
+                    </div>
+                `;
+                
+                container.appendChild(preview);
+            });
+            
+            // Also create a simple favicon
+            const faviconCanvas = document.createElement('canvas');
+            faviconCanvas.width = 32;
+            faviconCanvas.height = 32;
+            const faviconCtx = faviconCanvas.getContext('2d');
+            
+            const faviconGradient = faviconCtx.createLinearGradient(0, 0, 32, 32);
+            faviconGradient.addColorStop(0, '#00AEEF');
+            faviconGradient.addColorStop(1, '#1f6feb');
+            faviconCtx.fillStyle = faviconGradient;
+            faviconCtx.fillRect(0, 0, 32, 32);
+            
+            faviconCtx.fillStyle = 'white';
+            faviconCtx.font = 'bold 20px Arial';
+            faviconCtx.textAlign = 'center';
+            faviconCtx.textBaseline = 'middle';
+            faviconCtx.fillText('A', 16, 16);
+            
+            const faviconLink = document.createElement('a');
+            faviconLink.href = faviconCanvas.toDataURL();
+            faviconLink.download = 'favicon-32x32.png';
+            faviconLink.textContent = 'Download Favicon (32x32)';
+            faviconLink.className = 'download-btn';
+            faviconLink.style.display = 'block';
+            faviconLink.style.margin = '20px 0';
+            container.appendChild(faviconLink);
+        }
+    </script>
+</body>
+</html>
+

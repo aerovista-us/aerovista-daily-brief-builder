@@ -1,0 +1,1066 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Daily Brief Builder — AeroVista LLC</title>
+<meta name="description" content="AeroVista's intelligent task management platform. AI-powered daily briefs with smart prioritization, time-aware insights, and cyberpunk-inspired design.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Enhanced Color System */
+  --bg:#0a0b0f;
+  --bg-secondary:#0d1117;
+  --panel:#0f1117;
+  --panel2:#161b22;
+  --panel3:#21262d;
+  --text:#f0f6fc;
+  --text-secondary:#c9d1d9;
+  --muted:#8b949e;
+  --muted-light:#6e7681;
+  --border:#30363d;
+  --border-light:#21262d;
+  --accent:#58a6ff;
+  --accent-hover:#79c0ff;
+  --accent2:#3fb950;
+  --accent2-hover:#56d364;
+  --gold:#f0b72f;
+  --danger:#f85149;
+  --success:#3fb950;
+  --warning:#d29922;
+  --info:#58a6ff;
+  
+  /* Enhanced Shadow System */
+  --shadow-xs:0 1px 2px rgba(0,0,0,.05);
+  --shadow-sm:0 1px 3px rgba(0,0,0,.1);
+  --shadow:0 8px 24px rgba(0,0,0,.12);
+  --shadow-md:0 4px 12px rgba(0,0,0,.15);
+  --shadow-lg:0 16px 48px rgba(0,0,0,.24);
+  --shadow-xl:0 24px 64px rgba(0,0,0,.3);
+  
+  /* Enhanced Gradients */
+  --gradient:linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-accent:linear-gradient(135deg, var(--accent), #1f6feb);
+  --gradient-success:linear-gradient(135deg, var(--accent2), #2ea043);
+  --gradient-warm:linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+  --gradient-cool:linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  
+  /* Spacing System */
+  --space-xs:0.25rem;
+  --space-sm:0.5rem;
+  --space-md:1rem;
+  --space-lg:1.5rem;
+  --space-xl:2rem;
+  --space-2xl:3rem;
+  --space-3xl:4rem;
+  
+  /* Typography Scale */
+  --text-xs:0.75rem;
+  --text-sm:0.875rem;
+  --text-base:1rem;
+  --text-lg:1.125rem;
+  --text-xl:1.25rem;
+  --text-2xl:1.5rem;
+  --text-3xl:2rem;
+  --text-4xl:2.5rem;
+  --text-5xl:3rem;
+  
+  /* Border Radius */
+  --radius-sm:0.375rem;
+  --radius:0.5rem;
+  --radius-md:0.75rem;
+  --radius-lg:1rem;
+  --radius-xl:1.5rem;
+  --radius-full:9999px;
+  
+  /* Transitions */
+  --transition-fast:150ms ease;
+  --transition:250ms ease;
+  --transition-slow:350ms ease;
+  --transition-bounce:300ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;scroll-behavior:smooth}
+body{
+  background:linear-gradient(180deg, var(--bg) 0%, #0d1117 50%, var(--bg) 100%);
+  color:var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+  line-height:1.6;
+  overflow-x:hidden;
+}
+
+/* Header */
+.header{
+  background:var(--panel);
+  border-bottom:1px solid var(--border);
+  padding:1.5rem 0;
+  position:sticky;
+  top:0;
+  z-index:100;
+  -webkit-backdrop-filter:blur(10px);
+  backdrop-filter:blur(10px);
+}
+
+.wrap{
+  max-width:1200px;
+  margin:0 auto;
+  padding:0 24px;
+}
+
+.header-content{
+  display:flex;
+  flex-wrap:wrap;
+  gap:1rem;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.header-left h1{
+  margin:0;
+  font-size:clamp(1.5rem, 3vw, 2rem);
+  font-weight:700;
+  background:var(--gradient-accent);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+.sub{
+  color:var(--muted);
+  font-size:0.9rem;
+  margin-top:0.25rem;
+}
+
+.controls{
+  display:flex;
+  flex-wrap:wrap;
+  gap:0.75rem;
+  align-items:center;
+}
+
+.input, .select, .btn{
+  background:var(--panel2);
+  border:1px solid var(--border);
+  color:var(--text);
+  padding:0.75rem 1rem;
+  border-radius:8px;
+  outline:none;
+  font-size:0.9rem;
+  transition:all 0.2s ease;
+}
+
+.input:focus, .select:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(88,166,255,0.1);
+}
+
+.btn{
+  cursor:pointer;
+  font-weight:600;
+  display:inline-flex;
+  align-items:center;
+  gap:0.5rem;
+  text-decoration:none;
+  transition:all 0.2s ease;
+  border:none;
+}
+
+.btn:hover{
+  transform:translateY(-1px);
+}
+
+.btn-accent{
+  background:var(--gradient-accent);
+  color:white;
+  box-shadow:var(--shadow);
+}
+
+.btn-accent:hover{
+  box-shadow:var(--shadow-lg);
+}
+
+.btn-green{
+  background:var(--gradient-success);
+  color:white;
+  box-shadow:var(--shadow);
+}
+
+.btn-green:hover{
+  box-shadow:var(--shadow-lg);
+}
+
+.btn-secondary{
+  background:var(--panel2);
+  border:1px solid var(--border);
+}
+
+.btn-secondary:hover{
+  background:var(--panel);
+  border-color:var(--accent);
+}
+
+/* Main Layout */
+.grid{
+  display:grid;
+  gap:2rem;
+  margin-top:2rem;
+  min-height:calc(100vh - 200px);
+}
+
+@media (min-width:1024px){
+  .grid{grid-template-columns: 1fr 350px}
+}
+
+/* Cards */
+.card{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:1.5rem;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+
+.card::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:3px;
+  background:var(--gradient-accent);
+}
+
+.section-title{
+  margin:0 0 1rem 0;
+  font-size:1.25rem;
+  font-weight:600;
+  color:var(--text);
+  display:flex;
+  align-items:center;
+  gap:0.5rem;
+}
+
+.section-title::before{
+  content:'';
+  width:4px;
+  height:20px;
+  background:var(--gradient-accent);
+  border-radius:2px;
+}
+
+.section-title-first{
+  margin-top:0;
+}
+
+/* Items */
+.item{
+  background:var(--panel2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:1.25rem;
+  margin-bottom:1rem;
+  transition:all 0.2s ease;
+  position:relative;
+}
+
+.item:hover{
+  transform:translateY(-2px);
+  box-shadow:var(--shadow);
+  border-color:var(--accent);
+}
+
+.item:last-child{
+  margin-bottom:0;
+}
+
+.item h3{
+  margin:0 0 0.75rem 0;
+  font-size:1.1rem;
+  font-weight:600;
+  color:var(--text);
+  line-height:1.3;
+}
+
+.badges{
+  display:flex;
+  gap:0.5rem;
+  flex-wrap:wrap;
+  margin-bottom:0.75rem;
+}
+
+.badge{
+  font-size:0.75rem;
+  padding:0.25rem 0.75rem;
+  border-radius:12px;
+  font-weight:600;
+  display:inline-flex;
+  align-items:center;
+  gap:0.25rem;
+}
+
+.badge.time{
+  background:rgba(88,166,255,0.1);
+  color:var(--accent);
+  border:1px solid var(--accent);
+}
+
+.badge.money{
+  background:rgba(240,183,47,0.1);
+  color:var(--gold);
+  border:1px solid var(--gold);
+}
+
+.badge.unblock{
+  background:rgba(63,185,80,0.1);
+  color:var(--accent2);
+  border:1px solid var(--accent2);
+}
+
+.steps{
+  margin:0.75rem 0 0 0;
+  padding-left:1.25rem;
+}
+
+.steps li{
+  margin-bottom:0.5rem;
+  color:var(--muted);
+  line-height:1.5;
+}
+
+.steps li:last-child{
+  margin-bottom:0;
+}
+
+hr.sep{
+  border:0;
+  border-top:1px solid var(--border);
+  margin:1rem 0;
+}
+
+.motivation{
+  background:var(--panel2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:1rem;
+  font-size:1rem;
+  color:var(--text);
+  line-height:1.6;
+  position:relative;
+}
+
+.motivation::before{
+  content:'💡';
+  position:absolute;
+  top:1rem;
+  right:1rem;
+  font-size:1.25rem;
+}
+
+ul.clean{
+  margin:0.5rem 0;
+  padding-left:1.25rem;
+}
+
+ul.clean li{
+  margin-bottom:0.5rem;
+  color:var(--muted);
+  line-height:1.5;
+}
+
+ul.clean li:last-child{
+  margin-bottom:0;
+}
+
+.small{
+  font-size:0.85rem;
+  color:var(--muted);
+  line-height:1.4;
+}
+
+.kicker{
+  color:var(--muted);
+  font-size:0.8rem;
+  text-align:center;
+  margin-top:1rem;
+}
+
+.sticky{
+  position:sticky;
+  top:100px;
+  height:fit-content;
+}
+
+.note{
+  background:var(--panel2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:1rem;
+  font-size:0.9rem;
+  line-height:1.5;
+  color:var(--text);
+}
+
+/* Status indicators */
+.status-indicator{
+  display:inline-block;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  margin-right:0.5rem;
+}
+
+.status-indicator.active{
+  background:var(--success);
+  box-shadow:0 0 8px rgba(63,185,80,0.3);
+}
+
+.status-indicator.warning{
+  background:var(--warning);
+  box-shadow:0 0 8px rgba(210,153,34,0.3);
+}
+
+.status-indicator.danger{
+  background:var(--danger);
+  box-shadow:0 0 8px rgba(248,81,73,0.3);
+}
+
+/* Animations */
+@keyframes fadeInUp{
+  from{
+    opacity:0;
+    transform:translateY(20px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+.fade-in{
+  animation:fadeInUp 0.4s ease-out;
+}
+
+/* Responsive */
+@media (max-width:768px){
+  .header-content{
+    flex-direction:column;
+    align-items:stretch;
+  }
+  
+  .controls{
+    justify-content:center;
+  }
+  
+  .grid{
+    grid-template-columns:1fr;
+  }
+  
+  .sticky{
+    position:static;
+  }
+}
+
+/* Accessibility styles */
+.high-contrast {
+  --text: #ffffff;
+  --text-secondary: #ffffff;
+  --muted: #ffffff;
+  --border: #ffffff;
+  --accent: #00ffff;
+  --success: #00ff00;
+  --warning: #ffff00;
+  --danger: #ff0000;
+}
+
+.high-contrast .btn {
+  border: 2px solid currentColor;
+}
+
+.high-contrast .card {
+  border: 2px solid var(--border);
+}
+
+.reduced-motion * {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+/* Focus indicators */
+*:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Skip links */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--accent);
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+  border-radius: 4px;
+  z-index: 1000;
+  transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+  top: 6px;
+}
+
+/* Screen reader only text */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Print styles */
+@media print{
+  .header{
+    display:none;
+  }
+  
+  .card{
+    box-shadow:none;
+    border:1px solid #ccc;
+  }
+  
+  .btn{
+    display:none;
+  }
+}
+</style>
+</head>
+<body>
+  <!-- Streamlined Navigation Header -->
+  <div id="aerovista-header"></div>
+  
+  <div class="header">
+    <div class="wrap">
+      <h1>Daily Brief Builder</h1>
+          <div class="sub">Intelligent task management • All data stays local • Cyberpunk-inspired design</div>
+    <div class="controls">
+          <input id="date" type="date" class="input" title="Select date for brief">
+          <select id="mode" class="select" title="Choose brief mode">
+            <option value="morning">🌅 Morning Brief</option>
+            <option value="midday">☀️ Midday Nudge</option>
+            <option value="night">🌙 Nightly Wins</option>
+      </select>
+          <button id="regen" class="btn btn-accent" title="Generate new brief">
+            <span>⚡</span> Generate
+          </button>
+          <button id="copy" class="btn btn-secondary" title="Copy brief HTML">
+            <span>📋</span> Copy
+          </button>
+          <button id="export" class="btn btn-secondary" title="Export as HTML file">
+            <span>💾</span> Export
+          </button>
+          <button id="print" class="btn btn-secondary" title="Print brief">
+            <span>🖨️</span> Print
+          </button>
+          <button id="tomorrow" class="btn btn-green" title="Preview tomorrow's brief">
+            <span>🔮</span> Tomorrow
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+  <div class="grid">
+      <main id="brief" class="card fade-in"></main>
+
+    <aside class="card sticky" id="sidebar">
+        <h2 class="section-title section-title-first">⚙️ Settings & Tips</h2>
+      <div class="note small">
+          <strong>Auto‑mode:</strong> Morning → <em>Morning Brief</em>; Noon–5pm → <em>Midday Nudge</em>; After 5pm → <em>Nightly Wins</em>.
+        </div>
+        <hr class="sep">
+        <div class="small">
+          <strong>No‑movement threshold:</strong> 48 hours for ⏱️/💵 items. Update tasks anywhere—reopen to refresh timestamps.
+      </div>
+      <hr class="sep">
+      <div class="small">
+          <strong>Powered by:</strong> AeroVista's Nexus TechWorks division
+        </div>
+        <div class="small">
+          <strong>Platform:</strong> <a href="https://aerovista-us.web.app" target="_blank" rel="noopener" style="color:#00AEEF">aerovista-us.web.app</a>
+      </div>
+      <hr class="sep">
+        <div class="kicker">Built by AeroVista • Fully offline • LocalStorage only • Cyberpunk-inspired</div>
+    </aside>
+  </div>
+</div>
+
+<!-- Task Scheduler Modal -->
+<div id="scheduler-modal" class="modal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8);">
+  <div class="modal-content" style="background: var(--panel); margin: 5% auto; padding: 2rem; border-radius: 12px; width: 90%; max-width: 500px; border: 1px solid var(--border);">
+    <span class="close" onclick="closeScheduler()" style="color: var(--muted); float: right; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
+    <h2 style="color: var(--accent); margin-bottom: 1rem;">⏰ Schedule a Task</h2>
+    <form id="schedule-form">
+      <div class="form-group" style="margin-bottom: 1rem;">
+        <label for="task-select" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Select Task</label>
+        <select id="task-select" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-secondary); color: var(--text);">
+          <option value="">Choose a task to schedule...</option>
+        </select>
+      </div>
+      <div class="form-group" style="margin-bottom: 1rem;">
+        <label for="duration" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Duration (minutes)</label>
+        <select id="duration" required style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-secondary); color: var(--text);">
+          <option value="30">30 minutes</option>
+          <option value="60" selected>1 hour</option>
+          <option value="90">1.5 hours</option>
+          <option value="120">2 hours</option>
+          <option value="180">3 hours</option>
+        </select>
+      </div>
+      <div class="form-group" style="margin-bottom: 1rem;">
+        <label for="preferences" style="display: block; margin-bottom: 0.5rem; font-weight: 600;">Preferences</label>
+        <textarea id="preferences" placeholder="Any specific preferences for scheduling this task?" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-secondary); color: var(--text); height: 80px; resize: vertical;"></textarea>
+      </div>
+      <div style="display: flex; gap: 1rem;">
+        <button type="submit" class="btn" style="flex: 1;">Schedule Task</button>
+        <button type="button" class="btn btn-secondary" onclick="closeScheduler()" style="flex: 1;">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+  <script src="shared-utils.js"></script>
+  <script src="accessibility-utils.js"></script>
+  <script src="calendar-utils.js"></script>
+  <script src="navigation-utils.js"></script>
+<script>
+// ====== Use Shared Data Manager ======
+const DATA = window.AeroVistaData.data;
+const STATE = window.AeroVistaData.data.tasks.reduce((acc, task) => {
+  acc[task.id] = {
+    done: task.status === 'completed',
+    lastTouched: new Date(task.updatedAt).getTime()
+  };
+  return acc;
+}, {});
+
+function save(){ 
+  // Data is automatically saved by the shared manager
+}
+function ensure(id){ 
+  if(!STATE[id]) STATE[id] = {done:false,lastTouched: Date.now() - 3*24*60*60*1000}; 
+}
+function lastTouched(id){ 
+  ensure(id); 
+  return STATE[id].lastTouched; 
+}
+function markTouched(id){ 
+  ensure(id); 
+  STATE[id].lastTouched = Date.now(); 
+  // Update the task in shared data
+  const task = DATA.tasks.find(t => t.id === id);
+  if (task) {
+    window.AeroVistaData.updateTask(id, { updatedAt: new Date().toISOString() });
+  }
+}
+function markDone(id, val){ 
+  ensure(id); 
+  STATE[id].done = val; 
+  STATE[id].lastTouched = Date.now(); 
+  // Update the task status in shared data
+  const newStatus = val ? 'completed' : 'pending';
+  window.AeroVistaData.updateTask(id, { 
+    status: newStatus,
+    completedAt: val ? new Date().toISOString() : null,
+    updatedAt: new Date().toISOString()
+  });
+}
+
+// ====== Calendar & Scheduling Functions ======
+function showCalendarView() {
+  window.open('calendar-view.html', '_blank', 'width=1200,height=800');
+}
+
+function showScheduler() {
+  const modal = document.getElementById('scheduler-modal');
+  const taskSelect = document.getElementById('task-select');
+  
+  // Populate task select
+  taskSelect.innerHTML = '<option value="">Choose a task to schedule...</option>' +
+    DATA.tasks.filter(task => task.status !== 'completed').map(task => 
+      `<option value="${task.id}">${task.title}</option>`
+    ).join('');
+  
+  modal.style.display = 'block';
+}
+
+function closeScheduler() {
+  document.getElementById('scheduler-modal').style.display = 'none';
+}
+
+function loadTodaysScheduleHTML() {
+  const schedule = getTodaysSchedule();
+  if (schedule.length === 0) {
+    return '<div class="small" style="color: var(--muted);">No events scheduled today</div>';
+  }
+  
+  return schedule.map(block => {
+    const startTime = new Date(block.startTime);
+    const endTime = new Date(startTime.getTime() + block.duration * 60 * 1000);
+    const task = DATA.tasks.find(t => t.id === block.taskId);
+    
+    return `
+      <div class="small" style="margin-bottom: 0.5rem; padding: 0.5rem; background: var(--panel2); border-radius: 4px;">
+        <strong>${task ? task.title : 'Unknown Task'}</strong><br>
+        <span style="color: var(--muted);">${startTime.toLocaleTimeString()} - ${endTime.toLocaleTimeString()}</span>
+      </div>
+    `;
+  }).join('');
+}
+
+// ====== Helpers ======
+function fmtDate(d){ return d.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'}); }
+function badgeHTML(tags){
+  return tags.map(t=>{
+    if(t==='time') return '<span class="badge time">⏱️ time‑sensitive</span>';
+    if(t==='money') return '<span class="badge money">💵 revenue/impact</span>';
+    if(t==='unblock') return '<span class="badge unblock">🧩 unblocks</span>';
+    return '';
+  }).join('');
+}
+function weight(it, secId){
+  let s=0; if(it.tags.includes('time')) s+=3; if(it.tags.includes('money')) s+=2; if(it.tags.includes('unblock')) s+=1;
+  if(secId==='now') s+=2; else if(secId==='next') s+=1;
+  if(STATE[it.id]?.done) s-=5;
+  return s;
+}
+function pickTop5(){
+  // Use shared data manager for consistent task prioritization
+  return window.AeroVistaData.getTopTasks(5);
+}
+function tinyMove(it){ return it.tiny || "Write the smallest next step and do it in 5 minutes."; }
+function makeItem(it){
+  const priority = weight(it, 'now');
+  let statusIcon = '📋';
+  let statusClass = 'low';
+  
+  // Handle different status types
+  if (it.status === 'completed') {
+    statusIcon = '✅';
+    statusClass = 'completed';
+  } else if (it.status === 'in-progress') {
+    statusIcon = '▶️';
+    statusClass = 'high';
+  } else if (it.status === 'pending') {
+    statusIcon = '⏳';
+    statusClass = 'high';
+  } else if (it.status === 'backlog') {
+    statusIcon = '📦';
+    statusClass = 'medium';
+  } else if (STATE[it.id]?.done) {
+    statusIcon = '✅';
+    statusClass = 'completed';
+  } else if (priority > 5) {
+    statusIcon = '🔥';
+    statusClass = 'high';
+  } else if (priority > 2) {
+    statusIcon = '⚡';
+    statusClass = 'medium';
+  }
+  
+  return `<article class="item fade-in ${statusClass}" data-priority="${priority}">
+    <h3>${statusIcon} ${it.title}</h3>
+    <div class="badges">${badgeHTML(it.tags)}</div>
+    <div class="small"><strong>Definition of Done:</strong> ${it.dod}</div>
+    <div class="small"><strong>Next steps:</strong></div>
+    <ul class="steps">${it.steps.map(s=>`<li>${s}</li>`).join('')}</ul>
+    <hr class="sep">
+    <div class="small"><strong>🚀 Tiny first move:</strong> ${tinyMove(it)}</div>
+  </article>`;
+}
+function noMovementAlerts(thresholdHrs){
+  // Use shared data manager for consistent alerts
+  const alerts = window.AeroVistaData.getNoMovementAlerts(thresholdHrs);
+  return alerts.slice(0,5).map(it=>`<li><b>${it.title}</b> — smallest step: ${tinyMove(it)}</li>`);
+}
+function quickWins(){
+  // Use shared data manager for consistent quick wins
+  const qs = window.AeroVistaData.getQuickWins();
+  const top = pickTop5()[0]; 
+  if(top) qs.unshift(`Do tiny first move for <b>${top.title}</b>.`);
+  return qs.slice(0,5).map(x=>`<li>${x}</li>`);
+}
+function calendarWorthy(){
+  // Use shared data manager for consistent calendar items
+  return window.AeroVistaData.getCalendarWorthy();
+}
+function motivation(mode){
+  // Use shared data manager for consistent motivation
+  return window.AeroVistaData.getMotivation(mode);
+}
+
+// ====== Render ======
+function render(date, mode){
+  const brief = document.getElementById('brief');
+  const dateStr = fmtDate(date);
+  const currentHour = new Date().getHours();
+  const timeContext = currentHour < 12 ? 'morning' : currentHour < 17 ? 'afternoon' : 'evening';
+  
+  if(mode==='morning'){
+    const top = pickTop5().map(makeItem).join('');
+    const alerts = noMovementAlerts(48);
+    const alertCount = alerts.length;
+    
+    brief.innerHTML = `
+      <h2 class="section-title" style="margin-top:0">🌅 Morning Brief — ${dateStr}</h2>
+      <div class="small" style="margin-bottom:1.5rem;padding:0.75rem;background:var(--panel2);border-radius:8px;border-left:3px solid var(--accent)">
+        <strong>Good ${timeContext}!</strong> Here's your intelligently ranked task list for today. Focus on the highest priority items first.
+        <br><br><strong>Latest Update:</strong> Saturday, Oct 4, 2025 - 21:00 PT<br>
+        <strong>Focus:</strong> Gray-to-Green photos, PC secure wipe, NFL .ics generation
+      </div>
+      <section><h3 class="section-title">🎯 Today's Top 5 (AI-ranked by priority)</h3>${top}</section>
+      <section><h3 class="section-title">⚠️ No‑movement alerts (${alertCount} items stalled ~48h)</h3><ul class="clean">${alerts.join('')||'<li>✅ All clear! No stalled critical items.</li>'}</ul></section>
+      <section><h3 class="section-title">📅 Calendar‑worthy deadlines</h3><ul class="clean">${calendarWorthy()}</ul></section>
+      <section><h3 class="section-title">💡 Motivation</h3><div class="motivation">${motivation(mode)}</div></section>
+    `;
+    document.getElementById('sidebar').innerHTML = `
+      <h2 class="section-title" style="margin-top:0">⚡ Quick Wins & Tools</h2>
+      <ul class="clean">${quickWins().join('')}</ul>
+      <hr class="sep">
+      <h3 class="section-title">📅 Calendar & Scheduling</h3>
+      <div style="margin-bottom: 1rem;">
+        <button class="btn" onclick="showCalendarView()" style="margin-right: 0.5rem; margin-bottom: 0.5rem;">📅 Calendar</button>
+        <button class="btn" onclick="downloadNFLSchedule()" style="margin-right: 0.5rem; margin-bottom: 0.5rem;">🏈 NFL Schedule</button>
+        <button class="btn" onclick="showScheduler()" style="margin-bottom: 0.5rem;">⏰ Schedule</button>
+      </div>
+      <div id="todays-schedule" style="margin-top: 1rem;">
+        ${loadTodaysScheduleHTML()}
+      </div>
+      <hr class="sep">
+      <h3 class="section-title">🚩 Risks / Watchlist</h3>
+      <ul class="clean">${DATA.risks.map(risk => `<li>${risk}</li>`).join('')}</ul>
+      <hr class="sep">
+      <h3 class="section-title">🎯 Suggested Focus (Next 24h)</h3>
+      <ul class="clean">${DATA.focus.map(focus => `<li>${focus}</li>`).join('')}</ul>
+      <hr class="sep">
+      <div class="small"><strong>📝 Heartfelt note (copy/paste):</strong></div>
+      <div class="note">${DATA.heartfelt}</div>
+      <hr class="sep">
+      <div class="kicker">Built for AeroVista • Fully offline • LocalStorage only</div>
+    `;
+  } else if(mode==='midday'){
+    const alerts=noMovementAlerts(48);
+    const alertCount = alerts.length;
+    
+    brief.innerHTML = `
+      <h2 class="section-title" style="margin-top:0">☀️ Midday Nudge — ${dateStr}</h2>
+      <div class="small" style="margin-bottom:1.5rem;padding:0.75rem;background:var(--panel2);border-radius:8px;border-left:3px solid var(--warning)">
+        <strong>Midday check-in:</strong> Focus on ⏱️ time-sensitive and 💵 revenue/impact items that have been stalled for ~48 hours.
+      </div>
+      <section><h3 class="section-title">🎯 What needs attention? (${alertCount} items)</h3><ul class="clean">${
+        alerts.length?alerts.join(''):'<li>✅ All clear! 10‑minute improvement: update README ports to <strong>5173</strong>.</li>'
+      }</ul></section>
+      <section><h3 class="section-title">⏰ Snooze options</h3><ul class="clean">
+        <li>🕐 Snooze 2 hours</li>
+        <li>🌅 Snooze to tomorrow AM</li>
+        <li>📅 Schedule for next week</li>
+      </ul></section>
+      <section><h3 class="section-title">💡 Motivation</h3><div class="motivation">${motivation(mode)}</div></section>
+    `;
+  } else {
+    const completed = Object.entries(STATE).filter(([id,s])=>s.done).slice(-5).map(([id,s])=>{
+      const it = DATA.sections.flatMap(s=>s.items).find(x=>x.id===id);
+      return `<li><strong>${it?it.title:id}</strong> — completed ✅</li>`;
+    });
+    const carry = pickTop5().slice(0,3).map(it=>`<li><strong>${it.title}</strong> — first next step: ${tinyMove(it)}</li>`);
+    const completedCount = completed.length;
+    
+    brief.innerHTML = `
+      <h2 class="section-title" style="margin-top:0">🌙 Nightly Wins — ${dateStr}</h2>
+      <div class="small" style="margin-bottom:1.5rem;padding:0.75rem;background:var(--panel2);border-radius:8px;border-left:3px solid var(--accent2)">
+        <strong>End of day reflection:</strong> Celebrate your wins and set up tomorrow for success.
+      </div>
+      <section><h3 class="section-title">🏆 Completed today (${completedCount} wins)</h3><ul class="clean">${completed.join('')||'<li>🎯 Wins queued for tomorrow — dominoes are set.</li>'}</ul></section>
+      <section><h3 class="section-title">📋 Carry‑overs for tomorrow</h3><ul class="clean">${carry.join('')}</ul></section>
+      <section><h3 class="section-title">💡 Motivation</h3><div class="motivation">${motivation(mode)}</div></section>
+    `;
+  }
+}
+
+// ====== Controls ======
+function setDefaultDate(){ const d=new Date(); document.getElementById('date').value = d.toISOString().slice(0,10); }
+function autoMode(){
+  const h=new Date().getHours();
+  if(h<12) return 'morning'; if(h<17) return 'midday'; return 'night';
+}
+document.getElementById('regen').addEventListener('click', ()=>{
+  const d = new Date(document.getElementById('date').value || new Date());
+  const m = document.getElementById('mode').value;
+  render(d,m);
+});
+document.getElementById('tomorrow').addEventListener('click', ()=>{
+  const d = new Date(document.getElementById('date').value || new Date());
+  d.setDate(d.getDate()+1);
+  document.getElementById('date').value = d.toISOString().slice(0,10);
+  render(d,'morning');
+});
+document.getElementById('copy').addEventListener('click', async ()=>{
+  const html = document.getElementById('brief').innerHTML;
+  try{ await navigator.clipboard.writeText(html); alert('Brief HTML copied!'); }catch(e){ alert('Copy failed: '+e); }
+});
+document.getElementById('export').addEventListener('click', ()=>{
+  const blob = new Blob([document.documentElement.outerHTML], {type:"text/html"});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='daily_brief_builder.html'; a.click(); URL.revokeObjectURL(a.href);
+});
+document.getElementById('print').addEventListener('click', ()=> window.print());
+
+// ====== Enhanced Features ======
+function addTaskInteractions(){
+  // Add click handlers for task completion
+  document.addEventListener('click', (e) => {
+    if(e.target.closest('.item')){
+      const item = e.target.closest('.item');
+      const title = item.querySelector('h3').textContent.replace(/^[🔥⚡📋✅]\s*/, '');
+      const taskId = Object.keys(DATA.sections.flatMap(s => s.items)).find(id => {
+        const task = DATA.sections.flatMap(s => s.items).find(t => t.title === title);
+        return task ? task.id : null;
+      });
+      
+      if(taskId && confirm(`Mark "${title}" as completed?`)){
+        markDone(taskId, true);
+        render(new Date(document.getElementById('date').value), document.getElementById('mode').value);
+      }
+    }
+  });
+}
+
+// ====== Schedule Form Handler ======
+document.addEventListener('DOMContentLoaded', function() {
+  // Schedule form handler
+  const scheduleForm = document.getElementById('schedule-form');
+  if (scheduleForm) {
+    scheduleForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const taskId = document.getElementById('task-select').value;
+      const duration = parseInt(document.getElementById('duration').value);
+      const preferences = document.getElementById('preferences').value;
+      
+      if (!taskId) {
+        alert('Please select a task to schedule');
+        return;
+      }
+      
+      const result = scheduleTask(taskId, duration, { preferences });
+      
+      if (result.success) {
+        alert(result.message);
+        closeScheduler();
+        render();
+      } else {
+        alert(`Error: ${result.error}`);
+      }
+    });
+  }
+
+  // Initialize streamlined navigation
+  if (window.AeroVistaNav) {
+    window.AeroVistaNav.init();
+    
+    // Inject navigation components
+    const headerContainer = document.getElementById('aerovista-header');
+    if (headerContainer) {
+        headerContainer.innerHTML = window.generateHeader() + window.generateStatusBar();
+    }
+    
+    // Add FAB to body
+    document.body.insertAdjacentHTML('beforeend', window.generateFAB());
+  }
+});
+
+function addKeyboardShortcuts(){
+  document.addEventListener('keydown', (e) => {
+    if(e.ctrlKey || e.metaKey){
+      switch(e.key){
+        case 'r': e.preventDefault(); document.getElementById('regen').click(); break;
+        case 'c': e.preventDefault(); document.getElementById('copy').click(); break;
+        case 'e': e.preventDefault(); document.getElementById('export').click(); break;
+        case 'p': e.preventDefault(); document.getElementById('print').click(); break;
+        case 't': e.preventDefault(); document.getElementById('tomorrow').click(); break;
+      }
+    }
+  });
+}
+
+function addSmoothAnimations(){
+  // Add staggered animations to items
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        entry.target.style.animationDelay = `${Math.random() * 0.3}s`;
+        entry.target.classList.add('fade-in');
+      }
+    });
+  });
+  
+  document.querySelectorAll('.item').forEach(item => {
+    observer.observe(item);
+  });
+}
+
+// ====== Init ======
+setDefaultDate();
+const mode = autoMode();
+document.getElementById('mode').value = mode;
+render(new Date(), mode);
+
+// Add enhanced features
+addTaskInteractions();
+addKeyboardShortcuts();
+addSmoothAnimations();
+
+// Add helpful tooltips
+document.querySelectorAll('[title]').forEach(el => {
+  el.addEventListener('mouseenter', (e) => {
+    const tooltip = document.createElement('div');
+    tooltip.className = 'tooltip';
+    tooltip.textContent = e.target.title;
+    tooltip.style.cssText = `
+      position: absolute;
+      background: var(--panel2);
+      color: var(--text);
+      padding: 0.5rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      z-index: 1000;
+      pointer-events: none;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+    `;
+    document.body.appendChild(tooltip);
+    
+    const rect = e.target.getBoundingClientRect();
+    tooltip.style.left = rect.left + 'px';
+    tooltip.style.top = (rect.top - tooltip.offsetHeight - 5) + 'px';
+  });
+  
+  el.addEventListener('mouseleave', () => {
+    const tooltip = document.querySelector('.tooltip');
+    if(tooltip) tooltip.remove();
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1060 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TaskFlow — AeroVista Nexus TechWorks</title>
+<meta name="description" content="AeroVista's intelligent task management platform with real-time updates, smart reminders, and cyberpunk-inspired design.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* AeroVista Color System */
+  --bg:#0a0b0f;
+  --bg-secondary:#0d1117;
+  --panel:#0f1117;
+  --panel2:#161b22;
+  --panel3:#21262d;
+  --text:#f0f6fc;
+  --text-secondary:#c9d1d9;
+  --muted:#8b949e;
+  --muted-light:#6e7681;
+  --border:#30363d;
+  --border-light:#21262d;
+  --accent:#00AEEF;
+  --accent-hover:#79c0ff;
+  --accent2:#3fb950;
+  --accent2-hover:#56d364;
+  --gold:#f0b72f;
+  --danger:#f85149;
+  --success:#3fb950;
+  --warning:#d29922;
+  --info:#58a6ff;
+  
+  /* Enhanced Shadow System */
+  --shadow-xs:0 1px 2px rgba(0,0,0,.05);
+  --shadow-sm:0 1px 3px rgba(0,0,0,.1);
+  --shadow:0 8px 24px rgba(0,0,0,.12);
+  --shadow-md:0 4px 12px rgba(0,0,0,.15);
+  --shadow-lg:0 16px 48px rgba(0,0,0,.24);
+  --shadow-xl:0 24px 64px rgba(0,0,0,.3);
+  
+  /* Spacing System */
+  --space-xs:0.25rem;
+  --space-sm:0.5rem;
+  --space-md:1rem;
+  --space-lg:1.5rem;
+  --space-xl:2rem;
+  --space-2xl:3rem;
+  --space-3xl:4rem;
+  
+  /* Typography Scale */
+  --text-xs:0.75rem;
+  --text-sm:0.875rem;
+  --text-base:1rem;
+  --text-lg:1.125rem;
+  --text-xl:1.25rem;
+  --text-2xl:1.5rem;
+  --text-3xl:2rem;
+  --text-4xl:2.5rem;
+  --text-5xl:3rem;
+  
+  /* Border Radius */
+  --radius-sm:0.375rem;
+  --radius:0.5rem;
+  --radius-md:0.75rem;
+  --radius-lg:1rem;
+  --radius-xl:1.5rem;
+  --radius-full:9999px;
+  
+  /* Transitions */
+  --transition-fast:150ms ease;
+  --transition:250ms ease;
+  --transition-slow:350ms ease;
+  --transition-bounce:300ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;scroll-behavior:smooth}
+body{
+  background:linear-gradient(180deg, var(--bg) 0%, var(--bg-secondary) 50%, var(--bg) 100%);
+  color:var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+  line-height:1.6;
+  overflow-x:hidden;
+  font-size:var(--text-base);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+/* AeroVista Brand Elements */
+.brand-header{
+  background:var(--panel);
+  border-bottom:1px solid var(--border);
+  padding:1rem 0;
+  position:sticky;
+  top:0;
+  z-index:100;
+  -webkit-backdrop-filter:blur(10px);
+  backdrop-filter:blur(10px);
+}
+
+.brand-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:var(--space-sm);
+  padding:var(--space-sm) var(--space-md);
+  background:linear-gradient(135deg, rgba(0,174,239,0.1), rgba(192,192,192,0.05));
+  border:1px solid rgba(0,174,239,0.3);
+  border-radius:var(--radius-full);
+  font-size:var(--text-sm);
+  font-weight:600;
+  margin-bottom:var(--space-lg);
+}
+
+.aerovista-logo{
+  color:var(--accent);
+  font-family:'Orbitron', monospace;
+  letter-spacing:0.5px;
+  text-shadow:0 0 10px rgba(0,174,239,0.3);
+}
+
+.tagline{
+  color:var(--muted);
+  font-style:italic;
+}
+
+/* Layout */
+.container{
+  max-width:1400px;
+  margin:0 auto;
+  padding:0 24px;
+}
+
+.app-layout{
+  display:grid;
+  grid-template-columns:300px 1fr 350px;
+  gap:2rem;
+  min-height:calc(100vh - 80px);
+  padding:2rem 0;
+}
+
+@media (max-width:1200px){
+  .app-layout{grid-template-columns:1fr 350px}
+}
+
+@media (max-width:768px){
+  .app-layout{grid-template-columns:1fr}
+}
+
+/* Sidebar */
+.sidebar{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:1.5rem;
+  height:fit-content;
+  position:sticky;
+  top:100px;
+}
+
+.sidebar h3{
+  color:var(--text);
+  margin-bottom:1rem;
+  font-size:var(--text-lg);
+  font-weight:600;
+}
+
+.sidebar-section{
+  margin-bottom:2rem;
+}
+
+.sidebar-section:last-child{
+  margin-bottom:0;
+}
+
+/* Main Content */
+.main-content{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:2rem;
+  min-height:600px;
+}
+
+/* Activity Feed */
+.activity-feed{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:1.5rem;
+  height:fit-content;
+  position:sticky;
+  top:100px;
+}
+
+/* Task Cards */
+.task-card{
+  background:var(--panel2);
+  border:1px solid var(--border);
+  border-radius:var(--radius-md);
+  padding:1.5rem;
+  margin-bottom:1rem;
+  transition:all var(--transition);
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+}
+
+.task-card:hover{
+  transform:translateY(-2px);
+  box-shadow:var(--shadow-md);
+  border-color:var(--accent);
+}
+
+.task-card.completed{
+  opacity:0.6;
+  background:var(--panel3);
+}
+
+.task-card.completed .task-title{
+  text-decoration:line-through;
+  color:var(--muted);
+}
+
+.task-priority{
+  display:inline-block;
+  padding:0.25rem 0.75rem;
+  border-radius:var(--radius-full);
+  font-size:var(--text-xs);
+  font-weight:600;
+  margin-bottom:0.75rem;
+}
+
+.task-priority.high{
+  background:rgba(248,81,73,0.1);
+  color:var(--danger);
+  border:1px solid var(--danger);
+}
+
+.task-priority.medium{
+  background:rgba(240,183,47,0.1);
+  color:var(--gold);
+  border:1px solid var(--gold);
+}
+
+.task-priority.low{
+  background:rgba(63,185,80,0.1);
+  color:var(--success);
+  border:1px solid var(--success);
+}
+
+.task-title{
+  font-size:var(--text-lg);
+  font-weight:600;
+  color:var(--text);
+  margin-bottom:0.5rem;
+}
+
+.task-description{
+  color:var(--muted);
+  margin-bottom:1rem;
+  line-height:1.5;
+}
+
+.task-meta{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:var(--text-sm);
+  color:var(--muted);
+}
+
+.task-actions{
+  display:flex;
+  gap:0.5rem;
+}
+
+/* Buttons */
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:var(--space-sm);
+  padding:var(--space-sm) var(--space-md);
+  border-radius:var(--radius-md);
+  font-weight:600;
+  text-decoration:none;
+  transition:all var(--transition);
+  border:none;
+  cursor:pointer;
+  font-size:var(--text-sm);
+  position:relative;
+  overflow:hidden;
+  min-height:36px;
+  -webkit-user-select:none;
+  user-select:none;
+}
+
+.btn:active{
+  transform:scale(0.95);
+}
+
+.btn-primary{
+  background:linear-gradient(135deg, var(--accent), #1f6feb);
+  color:white;
+  box-shadow:var(--shadow-sm);
+}
+
+.btn-primary:hover{
+  transform:translateY(-1px);
+  box-shadow:var(--shadow);
+}
+
+.btn-secondary{
+  background:var(--panel2);
+  color:var(--text);
+  border:1px solid var(--border);
+}
+
+.btn-secondary:hover{
+  background:var(--panel3);
+  border-color:var(--accent);
+}
+
+.btn-success{
+  background:linear-gradient(135deg, var(--success), #2ea043);
+  color:white;
+}
+
+.btn-danger{
+  background:linear-gradient(135deg, var(--danger), #ff4757);
+  color:white;
+}
+
+.btn-sm{
+  padding:0.25rem 0.75rem;
+  font-size:var(--text-xs);
+  min-height:28px;
+}
+
+/* Form Elements */
+.form-group{
+  margin-bottom:1rem;
+}
+
+.form-label{
+  display:block;
+  color:var(--text);
+  font-weight:600;
+  margin-bottom:0.5rem;
+  font-size:var(--text-sm);
+}
+
+.form-input, .form-select, .form-textarea{
+  width:100%;
+  background:var(--panel2);
+  border:1px solid var(--border);
+  color:var(--text);
+  padding:0.75rem;
+  border-radius:var(--radius-md);
+  outline:none;
+  font-size:var(--text-base);
+  transition:all var(--transition);
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(0,174,239,0.1);
+}
+
+.form-textarea{
+  resize:vertical;
+  min-height:100px;
+}
+
+/* Activity Items */
+.activity-item{
+  display:flex;
+  align-items:flex-start;
+  gap:1rem;
+  padding:1rem;
+  background:var(--panel2);
+  border-radius:var(--radius-md);
+  margin-bottom:0.75rem;
+  border-left:3px solid var(--accent);
+}
+
+.activity-item:last-child{
+  margin-bottom:0;
+}
+
+.activity-icon{
+  width:32px;
+  height:32px;
+  background:var(--accent);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:var(--text-sm);
+  flex-shrink:0;
+}
+
+.activity-content{
+  flex:1;
+}
+
+.activity-text{
+  color:var(--text);
+  margin-bottom:0.25rem;
+}
+
+.activity-time{
+  color:var(--muted);
+  font-size:var(--text-xs);
+}
+
+/* Stats Cards */
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));
+  gap:1rem;
+  margin-bottom:2rem;
+}
+
+.stat-card{
+  background:var(--panel2);
+  border:1px solid var(--border);
+  border-radius:var(--radius-md);
+  padding:1.5rem;
+  text-align:center;
+  transition:all var(--transition);
+}
+
+.stat-card:hover{
+  transform:translateY(-2px);
+  box-shadow:var(--shadow-md);
+}
+
+.stat-number{
+  font-size:var(--text-3xl);
+  font-weight:700;
+  color:var(--accent);
+  margin-bottom:0.5rem;
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:var(--text-sm);
+}
+
+/* Notifications */
+.notification{
+  position:fixed;
+  top:20px;
+  right:20px;
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:var(--radius-md);
+  padding:1rem 1.5rem;
+  box-shadow:var(--shadow-lg);
+  z-index:1000;
+  transform:translateX(400px);
+  transition:transform var(--transition);
+}
+
+.notification.show{
+  transform:translateX(0);
+}
+
+.notification.success{
+  border-left:4px solid var(--success);
+}
+
+.notification.warning{
+  border-left:4px solid var(--warning);
+}
+
+.notification.error{
+  border-left:4px solid var(--danger);
+}
+
+/* Animations */
+@keyframes fadeInUp{
+  from{
+    opacity:0;
+    transform:translateY(20px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+.fade-in{
+  animation:fadeInUp 0.4s ease-out;
+}
+
+/* Responsive */
+@media (max-width:768px){
+  .container{
+    padding:0 16px;
+  }
+  
+  .app-layout{
+    grid-template-columns:1fr;
+    gap:1rem;
+    padding:1rem 0;
+  }
+  
+  .sidebar, .activity-feed{
+    position:static;
+  }
+}
+
+/* Loading States */
+.loading{
+  opacity:0.6;
+  pointer-events:none;
+}
+
+.loading::after{
+  content:'';
+  position:absolute;
+  top:50%;
+  left:50%;
+  width:20px;
+  height:20px;
+  margin:-10px 0 0 -10px;
+  border:2px solid var(--accent);
+  border-top-color:transparent;
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+  to{transform:rotate(360deg)}
+}
+</style>
+</head>
+<body>
+  <!-- Streamlined Navigation Header -->
+  <div id="aerovista-header"></div>
+  
+  <!-- Main Content Header -->
+  <div class="brand-header">
+    <div class="container">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <h1 style="color:var(--text);font-size:var(--text-2xl);font-weight:700">TaskFlow</h1>
+        <div style="display:flex;gap:0.5rem">
+          <button id="addTaskBtn" class="btn btn-primary">
+            <span>➕</span> Add Task
+          </button>
+          <button id="refreshBtn" class="btn btn-secondary">
+            <span>🔄</span> Refresh
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main App Layout -->
+  <div class="container">
+    <div class="app-layout">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-section">
+          <h3>📊 Quick Stats</h3>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-number" id="totalTasks">0</div>
+              <div class="stat-label">Total Tasks</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="completedTasks">0</div>
+              <div class="stat-label">Completed</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="pendingTasks">0</div>
+              <div class="stat-label">Pending</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="overdueTasks">0</div>
+              <div class="stat-label">Overdue</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <h3>🎯 Quick Actions</h3>
+          <div style="display:flex;flex-direction:column;gap:0.5rem">
+            <button class="btn btn-secondary btn-sm" onclick="filterTasks('all')">
+              📋 All Tasks
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="filterTasks('pending')">
+              ⏳ Pending
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="filterTasks('completed')">
+              ✅ Completed
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="filterTasks('overdue')">
+              🚨 Overdue
+            </button>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <h3>⚙️ Settings</h3>
+          <div style="display:flex;flex-direction:column;gap:0.5rem">
+            <label style="display:flex;align-items:center;gap:0.5rem;color:var(--text);font-size:var(--text-sm)">
+              <input type="checkbox" id="notificationsEnabled" checked>
+              🔔 Notifications
+            </label>
+            <label style="display:flex;align-items:center;gap:0.5rem;color:var(--text);font-size:var(--text-sm)">
+              <input type="checkbox" id="autoRefresh" checked>
+              🔄 Auto Refresh
+            </label>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main-content">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem">
+          <h2 style="color:var(--text);font-size:var(--text-2xl);font-weight:600">Your Tasks</h2>
+          <div style="display:flex;gap:0.5rem">
+            <select id="sortBy" class="form-select" style="width:auto" title="Sort tasks by criteria">
+              <option value="created">Sort by Created</option>
+              <option value="due">Sort by Due Date</option>
+              <option value="priority">Sort by Priority</option>
+              <option value="title">Sort by Title</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="tasksContainer">
+          <!-- Tasks will be dynamically loaded here -->
+        </div>
+
+        <!-- Add Task Modal (hidden by default) -->
+        <div id="addTaskModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);z-index:1000;display:flex;align-items:center;justify-content:center">
+          <div style="background:var(--panel);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2rem;width:90%;max-width:500px;max-height:90vh;overflow-y:auto">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem">
+              <h3 style="color:var(--text);font-size:var(--text-xl);font-weight:600">Add New Task</h3>
+              <button id="closeModal" style="background:none;border:none;color:var(--muted);font-size:1.5rem;cursor:pointer">&times;</button>
+            </div>
+            
+            <form id="taskForm">
+              <div class="form-group">
+                <label class="form-label">Task Title</label>
+                <input type="text" id="taskTitle" class="form-input" placeholder="Enter task title..." required>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Description</label>
+                <textarea id="taskDescription" class="form-textarea" placeholder="Enter task description..."></textarea>
+              </div>
+              
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+                <div class="form-group">
+                  <label class="form-label">Priority</label>
+                  <select id="taskPriority" class="form-select" title="Select task priority level">
+                    <option value="low">🟢 Low</option>
+                    <option value="medium" selected>🟡 Medium</option>
+                    <option value="high">🔴 High</option>
+                  </select>
+                </div>
+                
+                <div class="form-group">
+                  <label class="form-label">Due Date</label>
+                  <input type="datetime-local" id="taskDueDate" class="form-input" title="Set task due date and time">
+                </div>
+              </div>
+              
+              <div style="display:flex;gap:1rem;margin-top:1.5rem">
+                <button type="submit" class="btn btn-primary" style="flex:1">
+                  <span>➕</span> Create Task
+                </button>
+                <button type="button" id="cancelTask" class="btn btn-secondary">
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </main>
+
+      <!-- Activity Feed -->
+      <aside class="activity-feed">
+        <h3 style="color:var(--text);margin-bottom:1rem;font-size:var(--text-lg);font-weight:600">📈 Activity Feed</h3>
+        <div id="activityContainer">
+          <!-- Activity items will be dynamically loaded here -->
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script src="shared-utils.js"></script>
+  <script src="accessibility-utils.js"></script>
+  <script src="calendar-utils.js"></script>
+  <script src="navigation-utils.js"></script>
+  <script>
+    // Task Management System
+    class TaskManager {
+      constructor() {
+        this.data = window.AeroVistaData.data;
+        this.tasks = this.data.tasks;
+        this.activities = this.data.activities;
+        this.currentFilter = 'all';
+        this.init();
+      }
+
+      init() {
+        this.bindEvents();
+        this.renderTasks();
+        this.renderStats();
+        this.renderActivities();
+        this.startAutoRefresh();
+      }
+
+      bindEvents() {
+        // Add task button
+        document.getElementById('addTaskBtn').addEventListener('click', () => {
+          this.showAddTaskModal();
+        });
+
+        // Close modal buttons
+        document.getElementById('closeModal').addEventListener('click', () => {
+          this.hideAddTaskModal();
+        });
+        document.getElementById('cancelTask').addEventListener('click', () => {
+          this.hideAddTaskModal();
+        });
+
+        // Task form submission
+        document.getElementById('taskForm').addEventListener('submit', (e) => {
+          e.preventDefault();
+          this.createTask();
+        });
+
+        // Refresh button
+        document.getElementById('refreshBtn').addEventListener('click', () => {
+          this.refreshData();
+        });
+
+        // Sort change
+        document.getElementById('sortBy').addEventListener('change', (e) => {
+          this.sortTasks(e.target.value);
+        });
+
+        // Settings
+        document.getElementById('notificationsEnabled').addEventListener('change', (e) => {
+          this.updateSettings('notifications', e.target.checked);
+        });
+        document.getElementById('autoRefresh').addEventListener('change', (e) => {
+          this.updateSettings('autoRefresh', e.target.checked);
+        });
+      }
+
+      showAddTaskModal() {
+        document.getElementById('addTaskModal').style.display = 'flex';
+        document.getElementById('taskTitle').focus();
+      }
+
+      hideAddTaskModal() {
+        document.getElementById('addTaskModal').style.display = 'none';
+        document.getElementById('taskForm').reset();
+      }
+
+      createTask() {
+        const title = document.getElementById('taskTitle').value.trim();
+        const description = document.getElementById('taskDescription').value.trim();
+        const priority = document.getElementById('taskPriority').value;
+        const dueDate = document.getElementById('taskDueDate').value;
+
+        if (!title) return;
+
+        const task = {
+          title,
+          description,
+          priority,
+          dueDate: dueDate ? new Date(dueDate).toISOString() : null,
+          status: 'pending'
+        };
+
+        // Use shared data manager
+        const result = window.AeroVistaData.addTask(task);
+        if (result.success) {
+          this.data = window.AeroVistaData.data; // Refresh data reference
+          this.tasks = this.data.tasks;
+          this.activities = this.data.activities;
+          this.renderTasks();
+          this.renderStats();
+          this.hideAddTaskModal();
+          this.showNotification('Task created successfully!', 'success');
+        } else {
+          this.showNotification(`Error: ${result.error}`, 'error');
+        }
+      }
+
+      toggleTask(id) {
+        // Use shared data manager
+        const result = window.AeroVistaData.toggleTaskStatus(id);
+        if (result.success) {
+          this.data = window.AeroVistaData.data; // Refresh data reference
+          this.tasks = this.data.tasks;
+          this.activities = this.data.activities;
+          this.renderTasks();
+          this.renderStats();
+          this.showNotification(
+            result.task.status === 'completed' ? 'Task completed!' : 'Task reopened!', 
+            result.task.status === 'completed' ? 'success' : 'info'
+          );
+        } else {
+          this.showNotification(`Error: ${result.error}`, 'error');
+        }
+      }
+
+      deleteTask(id) {
+        const task = this.tasks.find(t => t.id === id);
+        if (task && confirm(`Delete task "${task.title}"?`)) {
+          // Use shared data manager
+          const result = window.AeroVistaData.deleteTask(id);
+          if (result.success) {
+            this.data = window.AeroVistaData.data; // Refresh data reference
+            this.tasks = this.data.tasks;
+            this.activities = this.data.activities;
+            this.renderTasks();
+            this.renderStats();
+            this.showNotification('Task deleted!', 'warning');
+          } else {
+            this.showNotification(`Error: ${result.error}`, 'error');
+          }
+        }
+      }
+
+      filterTasks(filter) {
+        this.currentFilter = filter;
+        this.renderTasks();
+      }
+
+      sortTasks(sortBy) {
+        const sortedTasks = [...this.tasks].sort((a, b) => {
+          switch (sortBy) {
+            case 'created':
+              return new Date(b.createdAt) - new Date(a.createdAt);
+            case 'due':
+              if (!a.dueDate && !b.dueDate) return 0;
+              if (!a.dueDate) return 1;
+              if (!b.dueDate) return -1;
+              return new Date(a.dueDate) - new Date(b.dueDate);
+            case 'priority':
+              const priorityOrder = { high: 3, medium: 2, low: 1 };
+              return priorityOrder[b.priority] - priorityOrder[a.priority];
+            case 'title':
+              return a.title.localeCompare(b.title);
+            default:
+              return 0;
+          }
+        });
+        this.renderTasks(sortedTasks);
+      }
+
+      renderTasks(tasksToRender = null) {
+        const tasks = tasksToRender || this.tasks;
+        const container = document.getElementById('tasksContainer');
+        
+        let filteredTasks = tasks;
+        if (this.currentFilter !== 'all') {
+          const now = new Date();
+          filteredTasks = tasks.filter(task => {
+            switch (this.currentFilter) {
+              case 'pending':
+                return task.status === 'pending';
+              case 'completed':
+                return task.status === 'completed';
+              case 'overdue':
+                return task.status !== 'completed' && task.dueDate && new Date(task.dueDate) < now;
+              default:
+                return true;
+            }
+          });
+        }
+
+        if (filteredTasks.length === 0) {
+          container.innerHTML = `
+            <div style="text-align:center;padding:3rem;color:var(--muted)">
+              <div style="font-size:3rem;margin-bottom:1rem">📝</div>
+              <h3 style="margin-bottom:0.5rem">No tasks found</h3>
+              <p>Create your first task to get started!</p>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = filteredTasks.map(task => `
+          <div class="task-card fade-in ${task.status === 'completed' ? 'completed' : ''}" data-task-id="${task.id}">
+            <div class="task-priority ${task.priority}">${task.priority.toUpperCase()}</div>
+            <div class="task-title">${task.title}</div>
+            ${task.description ? `<div class="task-description">${task.description}</div>` : ''}
+            <div class="task-meta">
+              <div>
+                ${task.dueDate ? `<span>📅 Due: ${new Date(task.dueDate).toLocaleDateString()}</span>` : ''}
+                <span style="margin-left:1rem">🕒 ${new Date(task.createdAt).toLocaleDateString()}</span>
+              </div>
+              <div class="task-actions">
+                <button onclick="taskManager.toggleTask('${task.id}')" class="btn btn-sm ${task.status === 'completed' ? 'btn-secondary' : 'btn-success'}">
+                  ${task.status === 'completed' ? '↩️' : '✅'}
+                </button>
+                <button onclick="taskManager.deleteTask('${task.id}')" class="btn btn-sm btn-danger">
+                  🗑️
+                </button>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      renderStats() {
+        const total = this.tasks.length;
+        const completed = this.tasks.filter(t => t.status === 'completed').length;
+        const pending = this.tasks.filter(t => t.status === 'pending').length;
+        const now = new Date();
+        const overdue = this.tasks.filter(t => 
+          t.status !== 'completed' && t.dueDate && new Date(t.dueDate) < now
+        ).length;
+
+        document.getElementById('totalTasks').textContent = total;
+        document.getElementById('completedTasks').textContent = completed;
+        document.getElementById('pendingTasks').textContent = pending;
+        document.getElementById('overdueTasks').textContent = overdue;
+      }
+
+      renderActivities() {
+        const container = document.getElementById('activityContainer');
+        const recentActivities = this.activities.slice(-10).reverse();
+
+        if (recentActivities.length === 0) {
+          container.innerHTML = `
+            <div style="text-align:center;padding:2rem;color:var(--muted)">
+              <div style="font-size:2rem;margin-bottom:0.5rem">📊</div>
+              <p>No activity yet</p>
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = recentActivities.map(activity => `
+          <div class="activity-item">
+            <div class="activity-icon">${this.getActivityIcon(activity.type)}</div>
+            <div class="activity-content">
+              <div class="activity-text">${activity.text}</div>
+              <div class="activity-time">${new Date(activity.timestamp).toLocaleString()}</div>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      getActivityIcon(type) {
+        const icons = {
+          created: '➕',
+          completed: '✅',
+          reopened: '🔄',
+          deleted: '🗑️'
+        };
+        return icons[type] || '📝';
+      }
+
+      addActivity(type, text) {
+        this.activities.push({
+          type,
+          text,
+          timestamp: new Date().toISOString()
+        });
+        this.saveActivities();
+      }
+
+      showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        notification.innerHTML = `
+          <div style="display:flex;align-items:center;gap:0.5rem">
+            <span>${type === 'success' ? '✅' : type === 'warning' ? '⚠️' : type === 'error' ? '❌' : 'ℹ️'}</span>
+            <span>${message}</span>
+          </div>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => notification.classList.add('show'), 100);
+        setTimeout(() => {
+          notification.classList.remove('show');
+          setTimeout(() => notification.remove(), 300);
+        }, 3000);
+      }
+
+      refreshData() {
+        this.renderTasks();
+        this.renderStats();
+        this.renderActivities();
+        this.showNotification('Data refreshed!', 'success');
+      }
+
+      startAutoRefresh() {
+        if (document.getElementById('autoRefresh').checked) {
+          setInterval(() => {
+            this.renderStats();
+            this.checkOverdueTasks();
+          }, 30000); // Check every 30 seconds
+        }
+      }
+
+      checkOverdueTasks() {
+        const now = new Date();
+        const overdueTasks = this.tasks.filter(t => 
+          t.status !== 'completed' && t.dueDate && new Date(t.dueDate) < now
+        );
+        
+        if (overdueTasks.length > 0 && document.getElementById('notificationsEnabled').checked) {
+          this.showNotification(`${overdueTasks.length} task(s) overdue!`, 'warning');
+        }
+      }
+
+      updateSettings(key, value) {
+        const settings = JSON.parse(localStorage.getItem('taskflow_settings') || '{}');
+        settings[key] = value;
+        localStorage.setItem('taskflow_settings', JSON.stringify(settings));
+      }
+
+      // Data is automatically saved by the shared data manager
+    }
+
+    // Initialize the app
+    const taskManager = new TaskManager();
+    
+    // Initialize streamlined navigation
+    if (window.AeroVistaNav) {
+      window.AeroVistaNav.init();
+      
+      // Inject navigation components
+      const headerContainer = document.getElementById('aerovista-header');
+      if (headerContainer) {
+        headerContainer.innerHTML = window.generateHeader() + window.generateStatusBar();
+      }
+      
+      // Add FAB to body
+      document.body.insertAdjacentHTML('beforeend', window.generateFAB());
+    }
+
+    // Global functions for onclick handlers
+    function filterTasks(filter) {
+      taskManager.filterTasks(filter);
+    }
+
+    // Sample data is already included in the shared data manager
+    // No need to add sample data as it's already provided
+  </script>
+</body>
+</html>

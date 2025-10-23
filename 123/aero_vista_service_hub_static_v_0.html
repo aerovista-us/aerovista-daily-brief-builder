@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AeroVista Service Hub — v0.1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .status-dot { width: 10px; height: 10px; border-radius: 9999px; display: inline-block; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen">
+  <header class="max-w-6xl mx-auto px-4 py-8">
+    <div class="flex items-center gap-4">
+      <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-600 shadow-lg"></div>
+      <div>
+        <h1 class="text-2xl font-semibold tracking-tight">AeroVista Service Hub</h1>
+        <p class="text-slate-400 text-sm">v0.1 · Temporary open-build dashboard · Will lock down later</p>
+      </div>
+      <div class="ml-auto flex items-center gap-2">
+        <span class="text-xs text-slate-400">Host:</span>
+        <input id="hostInput" class="bg-slate-800 border border-slate-700 rounded px-2 py-1 text-sm w-52" placeholder="192.168.7.253" />
+        <button id="applyHost" class="px-3 py-1 text-sm rounded bg-emerald-600 hover:bg-emerald-500">Apply</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 pb-16">
+    <div class="flex items-center gap-3 mb-4">
+      <input id="search" placeholder="Search services… (name, tags, port)" class="flex-1 bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-sm" />
+      <button id="refresh" class="px-3 py-2 text-sm rounded-lg bg-slate-800 border border-slate-700 hover:bg-slate-700">Re-check status</button>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4" id="cards"></div>
+  </main>
+
+  <template id="cardTpl">
+    <div class="group rounded-2xl border border-slate-800 bg-slate-900/60 hover:bg-slate-900 shadow-sm p-4 transition">
+      <div class="flex items-start gap-3">
+        <div class="w-9 h-9 rounded-xl bg-slate-800 flex items-center justify-center text-xs font-semibold"></div>
+        <div class="min-w-0">
+          <div class="flex items-center gap-2">
+            <h3 class="font-semibold truncate"></h3>
+            <span class="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-slate-800 border border-slate-700">
+              <span class="status-dot bg-slate-600"></span>
+              <span class="status-text">checking…</span>
+            </span>
+          </div>
+          <p class="text-slate-400 text-sm mt-0.5 line-clamp-2"></p>
+          <div class="flex flex-wrap gap-1 mt-2 tags"></div>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 mt-4">
+        <a class="visit inline-flex items-center justify-center px-3 py-1.5 text-sm rounded-lg bg-emerald-600 hover:bg-emerald-500" target="_blank" rel="noopener">Open</a>
+        <button class="copy px-3 py-1.5 text-sm rounded-lg bg-slate-800 border border-slate-700 hover:bg-slate-700">Copy URL</button>
+        <span class="text-xs text-slate-500 ml-auto">port <span class="port"></span></span>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    // --- Configure your known services here (prefill from your current listeners) ---
+    const DEFAULT_HOST = location.hostname || "192.168.7.253";
+    const services = [
+      { key: 'reverse-http', name: 'Reverse Proxy (HTTP)', desc: 'Primary web entry (HTTP). Temporary during build.', port: 80, scheme: 'http', tags: ['proxy','lan'] },
+      { key: 'reverse-https', name: 'Reverse Proxy (HTTPS)', desc: 'Primary web entry (HTTPS).', port: 443, scheme: 'https', tags: ['proxy','lan'] },
+      { key: 'app-3000', name: 'App @3000', desc: 'Generic app or Grafana-style UI.', port: 3000, scheme: 'http', tags: ['app'] },
+      { key: 'app-3001', name: 'App @3001', desc: 'Generic app UI.', port: 3001, scheme: 'http', tags: ['app'] },
+      { key: 'app-8080', name: 'App @8080', desc: 'Generic app UI.', port: 8080, scheme: 'http', tags: ['app'] },
+      { key: 'app-8081', name: 'App @8081', desc: 'Generic app UI (observed active).', port: 8081, scheme: 'http', tags: ['app'] },
+      { key: 'app-8082', name: 'App @8082', desc: 'Generic app UI.', port: 8082, scheme: 'http', tags: ['app'] },
+      { key: 'prometheus', name: 'Prometheus @9090', desc: 'Metrics time series (if enabled).', port: 9090, scheme: 'http', tags: ['metrics','monitoring'] },
+      { key: 'portainer-lan', name: 'Portainer (LAN) @9444', desc: 'Docker manager (LAN-published).', port: 9444, scheme: 'https', tags: ['docker','admin'] },
+      { key: 'portainer-ts', name: 'Portainer (Tailnet) @9443', desc: 'Docker manager (Tailnet listener).', host: '100.115.9.61', port: 9443, scheme: 'https', tags: ['docker','admin','tailscale'] },
+      { key: 'ssh', name: 'SSH @22', desc: 'Remote shell access for admins.', port: 22, scheme: 'ssh', tags: ['admin'] },
+      { key: 'cups', name: 'CUPS @631', desc: 'Print service (likely not needed on server).', port: 631, scheme: 'http', tags: ['printing'] }
+    ];
+
+    // --- Utility helpers ---
+    const hostInput = document.getElementById('hostInput');
+    const applyHostBtn = document.getElementById('applyHost');
+    hostInput.value = DEFAULT_HOST;
+
+    function buildUrl(svc) {
+      const host = svc.host || hostInput.value || DEFAULT_HOST;
+      if (svc.scheme === 'ssh') return `ssh://${host}:${svc.port}`; // just to have a string
+      const proto = svc.scheme || 'http';
+      return `${proto}://${host}:${svc.port}/`;
+    }
+
+    function tagChip(text) {
+      const span = document.createElement('span');
+      span.className = 'text-[10px] uppercase tracking-wide px-2 py-1 rounded bg-slate-800 border border-slate-700 text-slate-300';
+      span.textContent = text;
+      return span;
+    }
+
+    function iconTextForPort(p) {
+      if (p === 80) return '80';
+      if (p === 443) return 'TLS';
+      if ([3000,3001,8080,8081,8082].includes(p)) return 'WEB';
+      if (p === 9090) return 'MON';
+      if (p === 9443 || p === 9444) return 'DOCK';
+      if (p === 22) return 'SSH';
+      if (p === 631) return 'PRT';
+      return String(p);
+    }
+
+    const cardsEl = document.getElementById('cards');
+    const tpl = document.getElementById('cardTpl');
+
+    function render(list) {
+      cardsEl.innerHTML = '';
+      list.forEach(svc => {
+        const node = tpl.content.cloneNode(true);
+        const badge = node.querySelector('.w-9.h-9');
+        const name = node.querySelector('h3');
+        const desc = node.querySelector('p');
+        const visit = node.querySelector('.visit');
+        const copyBtn = node.querySelector('.copy');
+        const port = node.querySelector('.port');
+        const tags = node.querySelector('.tags');
+        const statusDot = node.querySelector('.status-dot');
+        const statusText = node.querySelector('.status-text');
+
+        badge.textContent = iconTextForPort(svc.port);
+        name.textContent = svc.name;
+        desc.textContent = svc.desc || '';
+        port.textContent = svc.port;
+        (svc.tags || []).forEach(t => tags.appendChild(tagChip(t)));
+
+        const url = buildUrl(svc);
+        visit.href = url;
+        visit.addEventListener('click', e => {
+          // allow default
+        });
+        copyBtn.addEventListener('click', async () => {
+          await navigator.clipboard.writeText(url);
+          copyBtn.textContent = 'Copied!';
+          setTimeout(() => (copyBtn.textContent = 'Copy URL'), 1200);
+        });
+
+        // probe status (HEAD first, then GET fallback; ignore SSH)
+        async function probe() {
+          if (svc.scheme === 'ssh') { statusDot.className = 'status-dot bg-slate-600'; statusText.textContent = 'n/a'; return; }
+          try {
+            const ctrl = new AbortController();
+            const timer = setTimeout(() => ctrl.abort(), 2500);
+            let res = await fetch(url, { method: 'HEAD', mode: 'no-cors', signal: ctrl.signal });
+            clearTimeout(timer);
+            statusDot.className = 'status-dot bg-emerald-500';
+            statusText.textContent = 'up';
+          } catch (e) {
+            // Try GET (no-cors); still not definitive but good enough
+            try {
+              const ctrl = new AbortController();
+              const timer = setTimeout(() => ctrl.abort(), 2500);
+              await fetch(url, { method: 'GET', mode: 'no-cors', signal: ctrl.signal });
+              clearTimeout(timer);
+              statusDot.className = 'status-dot bg-emerald-500';
+              statusText.textContent = 'maybe up';
+            } catch (e2) {
+              statusDot.className = 'status-dot bg-rose-500';
+              statusText.textContent = 'down';
+            }
+          }
+        }
+        probe();
+
+        cardsEl.appendChild(node);
+      });
+    }
+
+    render(services);
+
+    document.getElementById('refresh').addEventListener('click', () => render(services));
+    document.getElementById('applyHost').addEventListener('click', () => render(services));
+
+    // Simple search filter
+    const search = document.getElementById('search');
+    search.addEventListener('input', (e) => {
+      const q = e.target.value.trim().toLowerCase();
+      if (!q) return render(services);
+      const filtered = services.filter(s =>
+        (s.name && s.name.toLowerCase().includes(q)) ||
+        (s.desc && s.desc.toLowerCase().includes(q)) ||
+        (s.tags && s.tags.join(' ').toLowerCase().includes(q)) ||
+        String(s.port).includes(q)
+      );
+      render(filtered);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AeroVista Calendar & Scheduling</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="icons/favicon.svg">
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --bg-secondary: #1a1a1a;
+      --bg-tertiary: #2a2a2a;
+      --text: #ffffff;
+      --text-secondary: #cccccc;
+      --muted: #888888;
+      --accent: #00AEEF;
+      --success: #00ff88;
+      --warning: #ffaa00;
+      --danger: #ff4444;
+      --border: #333333;
+      --panel: #1a1a1a;
+      --panel2: #2a2a2a;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .header {
+      background: linear-gradient(135deg, var(--accent), #1f6feb);
+      padding: 2rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .header p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .calendar-card {
+      background: var(--panel);
+      border-radius: 12px;
+      padding: 1.5rem;
+      border: 1px solid var(--border);
+    }
+
+    .calendar-card h2 {
+      color: var(--accent);
+      margin-bottom: 1rem;
+      font-size: 1.3rem;
+    }
+
+    .time-block {
+      background: var(--panel2);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 0.5rem;
+      border-left: 4px solid var(--accent);
+      transition: all 0.3s ease;
+    }
+
+    .time-block:hover {
+      transform: translateX(4px);
+      box-shadow: 0 4px 12px rgba(0, 174, 239, 0.2);
+    }
+
+    .time-block.completed {
+      border-left-color: var(--success);
+      opacity: 0.7;
+    }
+
+    .time-block.overdue {
+      border-left-color: var(--danger);
+    }
+
+    .time-block-title {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .time-block-time {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .time-block-description {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .schedule-controls {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn:hover {
+      background: #0088cc;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 174, 239, 0.3);
+    }
+
+    .btn-secondary {
+      background: var(--panel2);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-tertiary);
+      border-color: var(--accent);
+    }
+
+    .btn-success {
+      background: var(--success);
+    }
+
+    .btn-success:hover {
+      background: #00cc66;
+    }
+
+    .btn-warning {
+      background: var(--warning);
+      color: var(--bg);
+    }
+
+    .btn-warning:hover {
+      background: #e69900;
+    }
+
+    .task-scheduler {
+      background: var(--panel);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid var(--border);
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--bg-secondary);
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0, 174, 239, 0.1);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .availability-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .availability-slot {
+      background: var(--panel2);
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .availability-slot.available {
+      border-color: var(--success);
+      background: rgba(0, 255, 136, 0.1);
+    }
+
+    .availability-slot.available:hover {
+      background: rgba(0, 255, 136, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .availability-slot.unavailable {
+      border-color: var(--danger);
+      background: rgba(255, 68, 68, 0.1);
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    .slot-time {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .slot-duration {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .nfl-schedule {
+      background: var(--panel);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid var(--border);
+    }
+
+    .nfl-game {
+      background: var(--panel2);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 0.5rem;
+      border-left: 4px solid var(--accent);
+    }
+
+    .nfl-game h4 {
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .nfl-game-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: var(--panel);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: var(--muted);
+    }
+
+    .empty-state h3 {
+      margin-bottom: 1rem;
+      color: var(--text-secondary);
+    }
+
+    @media (max-width: 768px) {
+      .calendar-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+      
+      .schedule-controls {
+        flex-direction: column;
+      }
+      
+      .container {
+        padding: 1rem;
+      }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Streamlined Navigation Header -->
+  <div id="aerovista-header"></div>
+  
+  <div class="container">
+    <div class="header">
+      <h1>📅 Calendar & Scheduling</h1>
+      <p>Intelligent time management and calendar integration for your daily brief</p>
+    </div>
+
+    <div class="schedule-controls">
+      <button class="btn" onclick="refreshCalendar()">🔄 Refresh</button>
+      <button class="btn btn-success" onclick="downloadNFLSchedule()">📥 Download NFL Schedule</button>
+      <button class="btn btn-secondary" onclick="showScheduler()">⏰ Schedule Task</button>
+      <button class="btn btn-warning" onclick="viewAvailability()">📊 View Availability</button>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number" id="today-events">0</div>
+        <div class="stat-label">Today's Events</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="week-events">0</div>
+        <div class="stat-label">This Week</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="available-slots">0</div>
+        <div class="stat-label">Available Slots</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="overdue-tasks">0</div>
+        <div class="stat-label">Overdue Tasks</div>
+      </div>
+    </div>
+
+    <div class="calendar-grid">
+      <div class="calendar-card">
+        <h2>📅 Today's Schedule</h2>
+        <div id="todays-schedule">
+          <div class="empty-state">
+            <h3>No events scheduled</h3>
+            <p>Click "Schedule Task" to add your first time block</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="calendar-card">
+        <h2>📊 This Week</h2>
+        <div id="weekly-schedule">
+          <div class="empty-state">
+            <h3>No weekly events</h3>
+            <p>Your week is looking clear</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="task-scheduler" id="task-scheduler" style="display: none;">
+      <h2>⏰ Schedule a Task</h2>
+      <form id="schedule-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="task-select">Select Task</label>
+            <select id="task-select" required>
+              <option value="">Choose a task to schedule...</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="duration">Duration (minutes)</label>
+            <select id="duration" required>
+              <option value="30">30 minutes</option>
+              <option value="60" selected>1 hour</option>
+              <option value="90">1.5 hours</option>
+              <option value="120">2 hours</option>
+              <option value="180">3 hours</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="preferences">Preferences</label>
+          <textarea id="preferences" placeholder="Any specific preferences for scheduling this task?"></textarea>
+        </div>
+        <button type="submit" class="btn">Schedule Task</button>
+        <button type="button" class="btn btn-secondary" onclick="hideScheduler()">Cancel</button>
+      </form>
+    </div>
+
+    <div class="nfl-schedule">
+      <h2>🏈 NFL Season Schedule</h2>
+      <p>Automated marketing reminders and game day notifications</p>
+      <div id="nfl-games">
+        <!-- NFL games will be populated here -->
+      </div>
+    </div>
+
+    <div id="availability-view" style="display: none;">
+      <h2>📊 Availability Overview</h2>
+      <div id="availability-slots" class="availability-grid">
+        <!-- Available slots will be populated here -->
+      </div>
+    </div>
+  </div>
+
+  <script src="shared-utils.js"></script>
+  <script src="calendar-utils.js"></script>
+  <script src="navigation-utils.js"></script>
+  <script>
+    // Initialize calendar view
+    function initCalendar() {
+      loadTodaysSchedule();
+      loadWeeklySchedule();
+      loadNFLGames();
+      updateStats();
+      populateTaskSelect();
+    }
+
+    // Load today's schedule
+    function loadTodaysSchedule() {
+      const schedule = getTodaysSchedule();
+      const container = document.getElementById('todays-schedule');
+      
+      if (schedule.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <h3>No events scheduled</h3>
+            <p>Click "Schedule Task" to add your first time block</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = schedule.map(block => {
+        const startTime = new Date(block.startTime);
+        const endTime = new Date(startTime.getTime() + block.duration * 60 * 1000);
+        const task = window.AeroVistaData.data.tasks.find(t => t.id === block.taskId);
+        
+        return `
+          <div class="time-block ${block.status === 'completed' ? 'completed' : ''}">
+            <div class="time-block-title">${task ? task.title : 'Unknown Task'}</div>
+            <div class="time-block-time">${startTime.toLocaleTimeString()} - ${endTime.toLocaleTimeString()}</div>
+            <div class="time-block-description">${block.description}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Load weekly schedule
+    function loadWeeklySchedule() {
+      const schedule = getWeeklySchedule();
+      const container = document.getElementById('weekly-schedule');
+      
+      if (schedule.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <h3>No weekly events</h3>
+            <p>Your week is looking clear</p>
+          </div>
+        `;
+        return;
+      }
+
+      // Group by day
+      const groupedSchedule = schedule.reduce((acc, block) => {
+        const date = new Date(block.startTime).toDateString();
+        if (!acc[date]) acc[date] = [];
+        acc[date].push(block);
+        return acc;
+      }, {});
+
+      container.innerHTML = Object.entries(groupedSchedule).map(([date, blocks]) => {
+        const dayName = new Date(date).toLocaleDateString('en-US', { weekday: 'long' });
+        return `
+          <div style="margin-bottom: 1rem;">
+            <h4 style="color: var(--accent); margin-bottom: 0.5rem;">${dayName}</h4>
+            ${blocks.map(block => {
+              const startTime = new Date(block.startTime);
+              const task = window.AeroVistaData.data.tasks.find(t => t.id === block.taskId);
+              return `
+                <div class="time-block" style="margin-bottom: 0.5rem;">
+                  <div class="time-block-title">${task ? task.title : 'Unknown Task'}</div>
+                  <div class="time-block-time">${startTime.toLocaleTimeString()}</div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Load NFL games
+    function loadNFLGames() {
+      const games = [
+        { date: '2025-10-05', time: '13:00', home: 'Lions', away: 'Bears', network: 'FOX' },
+        { date: '2025-10-05', time: '16:25', home: 'Packers', away: 'Vikings', network: 'CBS' },
+        { date: '2025-10-12', time: '13:00', home: 'Bears', away: 'Packers', network: 'FOX' },
+        { date: '2025-10-12', time: '16:25', home: 'Vikings', away: 'Lions', network: 'CBS' }
+      ];
+
+      const container = document.getElementById('nfl-games');
+      container.innerHTML = games.map(game => {
+        const gameDate = new Date(`${game.date}T${game.time}:00`);
+        return `
+          <div class="nfl-game">
+            <h4>${game.away} @ ${game.home}</h4>
+            <div class="nfl-game-details">
+              <div><strong>Date:</strong> ${gameDate.toLocaleDateString()}</div>
+              <div><strong>Time:</strong> ${gameDate.toLocaleTimeString()}</div>
+              <div><strong>Network:</strong> ${game.network}</div>
+              <div><strong>Marketing:</strong> 48h before game</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Update statistics
+    function updateStats() {
+      const todaysSchedule = getTodaysSchedule();
+      const weeklySchedule = getWeeklySchedule();
+      const availableSlots = getAvailableSlots(new Date(), 60);
+      const overdueTasks = window.AeroVistaData.data.tasks.filter(task => 
+        task.dueDate && new Date(task.dueDate) < new Date() && task.status !== 'completed'
+      );
+
+      document.getElementById('today-events').textContent = todaysSchedule.length;
+      document.getElementById('week-events').textContent = weeklySchedule.length;
+      document.getElementById('available-slots').textContent = availableSlots.filter(slot => slot.available).length;
+      document.getElementById('overdue-tasks').textContent = overdueTasks.length;
+    }
+
+    // Populate task select
+    function populateTaskSelect() {
+      const select = document.getElementById('task-select');
+      const tasks = window.AeroVistaData.data.tasks.filter(task => task.status !== 'completed');
+      
+      select.innerHTML = '<option value="">Choose a task to schedule...</option>' +
+        tasks.map(task => `<option value="${task.id}">${task.title}</option>`).join('');
+    }
+
+    // Show scheduler
+    function showScheduler() {
+      document.getElementById('task-scheduler').style.display = 'block';
+      document.getElementById('availability-view').style.display = 'none';
+    }
+
+    // Hide scheduler
+    function hideScheduler() {
+      document.getElementById('task-scheduler').style.display = 'none';
+    }
+
+    // View availability
+    function viewAvailability() {
+      const container = document.getElementById('availability-slots');
+      const slots = getAvailableSlots(new Date(), 60);
+      
+      container.innerHTML = slots.map(slot => `
+        <div class="availability-slot ${slot.available ? 'available' : 'unavailable'}">
+          <div class="slot-time">${slot.start.toLocaleTimeString()}</div>
+          <div class="slot-duration">${slot.duration} min</div>
+        </div>
+      `).join('');
+      
+      document.getElementById('availability-view').style.display = 'block';
+      document.getElementById('task-scheduler').style.display = 'none';
+    }
+
+    // Refresh calendar
+    function refreshCalendar() {
+      initCalendar();
+    }
+
+    // Handle schedule form submission
+    document.getElementById('schedule-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const taskId = document.getElementById('task-select').value;
+      const duration = parseInt(document.getElementById('duration').value);
+      const preferences = document.getElementById('preferences').value;
+      
+      if (!taskId) {
+        alert('Please select a task to schedule');
+        return;
+      }
+      
+      const result = scheduleTask(taskId, duration, { preferences });
+      
+      if (result.success) {
+        alert(result.message);
+        hideScheduler();
+        refreshCalendar();
+      } else {
+        alert(`Error: ${result.error}`);
+      }
+    });
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      initCalendar();
+      
+      // Initialize streamlined navigation
+      if (window.AeroVistaNav) {
+        window.AeroVistaNav.init();
+        
+        // Inject navigation components
+        const headerContainer = document.getElementById('aerovista-header');
+        if (headerContainer) {
+          headerContainer.innerHTML = window.generateHeader() + window.generateStatusBar();
+        }
+        
+        // Add FAB to body
+        document.body.insertAdjacentHTML('beforeend', window.generateFAB());
+      }
+    });
+  </script>
+</body>
+</html>
