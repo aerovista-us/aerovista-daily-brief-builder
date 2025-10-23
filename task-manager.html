@@ -950,7 +950,7 @@ body{
           <div class="activity-item">
             <div class="activity-icon">${this.getActivityIcon(activity.type)}</div>
             <div class="activity-content">
-              <div class="activity-text">${activity.text}</div>
+              <div class="activity-text">${activity.message}</div>
               <div class="activity-time">${new Date(activity.timestamp).toLocaleString()}</div>
             </div>
           </div>
@@ -962,15 +962,17 @@ body{
           created: '➕',
           completed: '✅',
           reopened: '🔄',
-          deleted: '🗑️'
+          deleted: '🗑️',
+          progress: '🔄',
+          alert: '⚠️'
         };
         return icons[type] || '📝';
       }
 
-      addActivity(type, text) {
+      addActivity(type, message) {
         this.activities.push({
           type,
-          text,
+          message,
           timestamp: new Date().toISOString()
         });
         this.saveActivities();
