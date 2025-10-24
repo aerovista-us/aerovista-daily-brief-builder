@@ -147,6 +147,92 @@
       box-shadow: 0 4px 12px rgba(0, 174, 239, 0.3);
     }
 
+    /* Projection Milestones */
+    .projection-milestones {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .projection-milestones h3 {
+      color: var(--accent);
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+
+    .milestones-timeline {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .milestone-card {
+      padding: 1rem;
+      background: var(--panel);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .milestone-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .milestone-card.current {
+      border-color: var(--success);
+      background: rgba(0, 255, 136, 0.1);
+    }
+
+    .milestone-card.completed {
+      border-color: var(--success);
+      background: rgba(0, 255, 136, 0.05);
+    }
+
+    .milestone-week {
+      font-size: 0.9rem;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .milestone-title {
+      font-size: 1rem;
+      color: var(--text);
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .milestone-dates {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+    }
+
+    .milestone-objectives {
+      list-style: none;
+      padding: 0;
+    }
+
+    .milestone-objectives li {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      padding: 0.25rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .milestone-objectives li:last-child {
+      border-bottom: none;
+    }
+
+    .milestone-objectives li::before {
+      content: '🎯';
+      margin-right: 0.5rem;
+    }
+
     .btn-secondary {
       background: var(--panel2);
       color: var(--text);
@@ -367,6 +453,10 @@
     <div class="header">
       <h1>📅 Calendar & Scheduling</h1>
       <p>Intelligent time management and calendar integration for your daily brief</p>
+      <div class="projection-milestones">
+        <h3>🚀 45-Day Projection Milestones</h3>
+        <div class="milestones-timeline" id="milestonesTimeline"></div>
+      </div>
     </div>
 
     <div class="schedule-controls">
@@ -655,9 +745,39 @@
       }
     });
 
+    // Load 45-day projection milestones
+    function loadProjectionMilestones() {
+      if (!window.AeroVistaData) return;
+      
+      const projection = window.AeroVistaData.getProjection();
+      const currentWeek = projection.currentWeek;
+      const milestonesContainer = document.getElementById('milestonesTimeline');
+      
+      if (!milestonesContainer) return;
+      
+      milestonesContainer.innerHTML = projection.weeklyGoals.map(week => {
+        const isCurrent = week.week === currentWeek;
+        const isCompleted = week.week < currentWeek;
+        const isPending = week.week > currentWeek;
+        
+        return `
+          <div class="milestone-card ${isCurrent ? 'current' : isCompleted ? 'completed' : ''}">
+            <div class="milestone-week">Week ${week.week}</div>
+            <div class="milestone-title">${week.name}</div>
+            <div class="milestone-dates">${week.dates}</div>
+            <ul class="milestone-objectives">
+              ${week.objectives.slice(0, 3).map(objective => `<li>${objective}</li>`).join('')}
+              ${week.objectives.length > 3 ? `<li>+${week.objectives.length - 3} more objectives</li>` : ''}
+            </ul>
+          </div>
+        `;
+      }).join('');
+    }
+
     // Initialize on page load
     document.addEventListener('DOMContentLoaded', () => {
       initCalendar();
+      loadProjectionMilestones();
       
       // Initialize streamlined navigation
       if (window.AeroVistaNav) {

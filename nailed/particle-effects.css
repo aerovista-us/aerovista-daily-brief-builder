@@ -1,0 +1,351 @@
+/* Mystical Particle Effects - Moth Wing Power */
+.particle {
+    position: absolute;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Dust particles */
+.dust-particle {
+    width: 2px;
+    height: 2px;
+    background: var(--mystical-dust);
+    border-radius: 50%;
+    animation: dustFloat 8s linear infinite;
+    box-shadow: 0 0 4px rgba(255, 255, 255, 0.6);
+}
+
+.dust-particle:nth-child(odd) {
+    width: 1px;
+    height: 1px;
+    animation-duration: 12s;
+}
+
+.dust-particle:nth-child(even) {
+    width: 3px;
+    height: 3px;
+    animation-duration: 6s;
+}
+
+@keyframes dustFloat {
+    0% {
+        transform: translateY(100vh) translateX(0) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-10vh) translateX(50px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* Shimmer particles */
+.shimmer-particle {
+    width: 1px;
+    height: 20px;
+    background: linear-gradient(to bottom, transparent, var(--mystical-glow), transparent);
+    animation: shimmerFloat 6s linear infinite;
+    opacity: 0.7;
+}
+
+.shimmer-particle:nth-child(odd) {
+    animation-duration: 8s;
+    height: 15px;
+}
+
+.shimmer-particle:nth-child(even) {
+    animation-duration: 4s;
+    height: 25px;
+}
+
+@keyframes shimmerFloat {
+    0% {
+        transform: translateY(100vh) translateX(0) rotate(0deg);
+        opacity: 0;
+    }
+    20% {
+        opacity: 0.7;
+    }
+    80% {
+        opacity: 0.7;
+    }
+    100% {
+        transform: translateY(-10vh) translateX(-30px) rotate(180deg);
+        opacity: 0;
+    }
+}
+
+/* Golden dust particles */
+.golden-dust {
+    width: 3px;
+    height: 3px;
+    background: radial-gradient(circle, var(--moth-gold), transparent);
+    border-radius: 50%;
+    animation: goldenDustFloat 10s linear infinite;
+    box-shadow: 0 0 6px var(--mystical-glow);
+}
+
+.golden-dust:nth-child(odd) {
+    width: 2px;
+    height: 2px;
+    animation-duration: 14s;
+}
+
+.golden-dust:nth-child(even) {
+    width: 4px;
+    height: 4px;
+    animation-duration: 7s;
+}
+
+@keyframes goldenDustFloat {
+    0% {
+        transform: translateY(100vh) translateX(0) rotate(0deg) scale(0);
+        opacity: 0;
+    }
+    15% {
+        opacity: 1;
+        transform: translateY(85vh) translateX(20px) rotate(45deg) scale(1);
+    }
+    85% {
+        opacity: 1;
+        transform: translateY(15vh) translateX(-20px) rotate(315deg) scale(1);
+    }
+    100% {
+        transform: translateY(-5vh) translateX(0) rotate(360deg) scale(0);
+        opacity: 0;
+    }
+}
+
+/* Moth wing particles */
+.moth-wing-particle {
+    width: 8px;
+    height: 4px;
+    background: linear-gradient(45deg, var(--moth-gold), var(--moth-cream));
+    border-radius: 50% 10% 50% 10%;
+    animation: mothWingFloat 12s linear infinite;
+    opacity: 0.6;
+    box-shadow: 0 0 8px var(--mystical-shadow);
+}
+
+.moth-wing-particle:nth-child(odd) {
+    animation-duration: 16s;
+    transform: scaleX(-1);
+}
+
+.moth-wing-particle:nth-child(even) {
+    animation-duration: 8s;
+}
+
+@keyframes mothWingFloat {
+    0% {
+        transform: translateY(100vh) translateX(0) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.6;
+    }
+    90% {
+        opacity: 0.6;
+    }
+    100% {
+        transform: translateY(-10vh) translateX(100px) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+/* Sparkle particles */
+.sparkle-particle {
+    width: 2px;
+    height: 2px;
+    background: var(--mystical-glow);
+    border-radius: 50%;
+    animation: sparkleFloat 5s linear infinite;
+    box-shadow: 0 0 4px var(--mystical-glow);
+}
+
+.sparkle-particle:nth-child(odd) {
+    animation-duration: 7s;
+    width: 1px;
+    height: 1px;
+}
+
+.sparkle-particle:nth-child(even) {
+    animation-duration: 3s;
+    width: 3px;
+    height: 3px;
+}
+
+@keyframes sparkleFloat {
+    0% {
+        transform: translateY(100vh) translateX(0) scale(0);
+        opacity: 0;
+    }
+    20% {
+        opacity: 1;
+        transform: translateY(80vh) translateX(30px) scale(1);
+    }
+    80% {
+        opacity: 1;
+        transform: translateY(20vh) translateX(-30px) scale(1);
+    }
+    100% {
+        transform: translateY(-5vh) translateX(0) scale(0);
+        opacity: 0;
+    }
+}
+
+/* Magical powder effect */
+.magical-powder {
+    width: 4px;
+    height: 4px;
+    background: radial-gradient(circle, var(--mystical-dust), transparent);
+    border-radius: 50%;
+    animation: magicalPowderFloat 9s linear infinite;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+}
+
+.magical-powder:nth-child(odd) {
+    animation-duration: 13s;
+    width: 2px;
+    height: 2px;
+}
+
+.magical-powder:nth-child(even) {
+    animation-duration: 6s;
+    width: 6px;
+    height: 6px;
+}
+
+@keyframes magicalPowderFloat {
+    0% {
+        transform: translateY(100vh) translateX(0) rotate(0deg) scale(0);
+        opacity: 0;
+    }
+    15% {
+        opacity: 0.8;
+        transform: translateY(85vh) translateX(40px) rotate(90deg) scale(1);
+    }
+    50% {
+        transform: translateY(50vh) translateX(-20px) rotate(180deg) scale(1.2);
+    }
+    85% {
+        opacity: 0.8;
+        transform: translateY(15vh) translateX(60px) rotate(270deg) scale(1);
+    }
+    100% {
+        transform: translateY(-5vh) translateX(0) rotate(360deg) scale(0);
+        opacity: 0;
+    }
+}
+
+/* Floating mystical orbs */
+.mystical-orb {
+    width: 6px;
+    height: 6px;
+    background: radial-gradient(circle, var(--mystical-glow), transparent);
+    border-radius: 50%;
+    animation: mysticalOrbFloat 15s linear infinite;
+    box-shadow: 0 0 12px var(--mystical-glow);
+}
+
+.mystical-orb:nth-child(odd) {
+    animation-duration: 20s;
+    width: 4px;
+    height: 4px;
+}
+
+.mystical-orb:nth-child(even) {
+    animation-duration: 10s;
+    width: 8px;
+    height: 8px;
+}
+
+@keyframes mysticalOrbFloat {
+    0% {
+        transform: translateY(100vh) translateX(0) rotate(0deg);
+        opacity: 0;
+    }
+    20% {
+        opacity: 0.7;
+    }
+    80% {
+        opacity: 0.7;
+    }
+    100% {
+        transform: translateY(-10vh) translateX(80px) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* Particle container positioning */
+#particle-container .particle:nth-child(1) { left: 10%; animation-delay: 0s; }
+#particle-container .particle:nth-child(2) { left: 20%; animation-delay: 1s; }
+#particle-container .particle:nth-child(3) { left: 30%; animation-delay: 2s; }
+#particle-container .particle:nth-child(4) { left: 40%; animation-delay: 3s; }
+#particle-container .particle:nth-child(5) { left: 50%; animation-delay: 4s; }
+#particle-container .particle:nth-child(6) { left: 60%; animation-delay: 5s; }
+#particle-container .particle:nth-child(7) { left: 70%; animation-delay: 6s; }
+#particle-container .particle:nth-child(8) { left: 80%; animation-delay: 7s; }
+#particle-container .particle:nth-child(9) { left: 90%; animation-delay: 8s; }
+#particle-container .particle:nth-child(10) { left: 15%; animation-delay: 9s; }
+#particle-container .particle:nth-child(11) { left: 25%; animation-delay: 10s; }
+#particle-container .particle:nth-child(12) { left: 35%; animation-delay: 11s; }
+#particle-container .particle:nth-child(13) { left: 45%; animation-delay: 12s; }
+#particle-container .particle:nth-child(14) { left: 55%; animation-delay: 13s; }
+#particle-container .particle:nth-child(15) { left: 65%; animation-delay: 14s; }
+#particle-container .particle:nth-child(16) { left: 75%; animation-delay: 15s; }
+#particle-container .particle:nth-child(17) { left: 85%; animation-delay: 16s; }
+#particle-container .particle:nth-child(18) { left: 95%; animation-delay: 17s; }
+#particle-container .particle:nth-child(19) { left: 5%; animation-delay: 18s; }
+#particle-container .particle:nth-child(20) { left: 12%; animation-delay: 19s; }
+
+/* Responsive particle adjustments */
+@media (max-width: 768px) {
+    .particle {
+        display: none; /* Hide particles on mobile for performance */
+    }
+    
+    #shimmer-overlay {
+        opacity: 0.3; /* Reduce shimmer intensity on mobile */
+    }
+}
+
+/* Performance optimizations */
+.particle {
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .particle {
+        animation: none;
+        opacity: 0;
+    }
+    
+    .mystical-logo {
+        animation: none;
+    }
+    
+    .mystical-tagline {
+        animation: none;
+    }
+    
+    .mystical-icon {
+        animation: none;
+    }
+    
+    .floating-card {
+        animation: none;
+    }
+    
+    .mystical-progress-fill::after {
+        animation: none;
+    }
+}

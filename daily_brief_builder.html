@@ -445,6 +445,219 @@ ul.clean li:last-child{
   animation:fadeInUp 0.4s ease-out;
 }
 
+/* Projection Progress Bar */
+.projection-progress {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background: var(--panel);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+.progress-bar {
+  flex: 1;
+  height: 8px;
+  background: var(--panel2);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 4px;
+  transition: width 0.3s ease;
+  position: relative;
+}
+
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.progress-text {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+/* Projection Section Styles */
+.projection-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.projection-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  background: var(--panel2);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+.stat-label {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.stat-value {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.phases-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.phase-card {
+  padding: 1rem;
+  background: var(--panel2);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  transition: all 0.3s ease;
+}
+
+.phase-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.phase-card.active {
+  border-color: var(--accent2);
+  background: var(--panel3);
+}
+
+.phase-title {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+
+.phase-status {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.phase-status.in-progress {
+  background: var(--accent);
+  color: white;
+}
+
+.phase-status.pending {
+  background: var(--muted);
+  color: var(--text);
+}
+
+.phase-status.completed {
+  background: var(--accent2);
+  color: white;
+}
+
+.weekly-goals {
+  display: grid;
+  gap: 1rem;
+}
+
+.goal-category {
+  padding: 1rem;
+  background: var(--panel2);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
+.goal-category h4 {
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+
+.goal-list {
+  list-style: none;
+  padding: 0;
+}
+
+.goal-list li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.goal-list li:last-child {
+  border-bottom: none;
+}
+
+.goal-list li::before {
+  content: '🎯';
+  font-size: var(--text-sm);
+}
+
+.kpis-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.kpi-card {
+  padding: 1rem;
+  background: var(--panel2);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  text-align: center;
+}
+
+.kpi-label {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.kpi-value {
+  font-size: var(--text-2xl);
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.kpi-target {
+  font-size: var(--text-sm);
+  color: var(--muted);
+  margin-top: 0.25rem;
+}
+
 /* Responsive */
 @media (max-width:768px){
   .header-content{
@@ -554,6 +767,12 @@ ul.clean li:last-child{
     <div class="wrap">
       <h1>Daily Brief Builder</h1>
           <div class="sub">Intelligent task management • All data stays local • Cyberpunk-inspired design</div>
+          <div class="projection-progress">
+            <div class="progress-bar">
+              <div class="progress-fill" id="projectionProgress"></div>
+            </div>
+            <span class="progress-text" id="projectionText">45-Day Projection: Week 1</span>
+          </div>
     <div class="controls">
           <input id="date" type="date" class="input" title="Select date for brief">
           <select id="mode" class="select" title="Choose brief mode">
@@ -584,6 +803,44 @@ ul.clean li:last-child{
   <div class="wrap">
   <div class="grid">
       <main id="brief" class="card fade-in"></main>
+
+      <!-- 45-Day Projection Section -->
+      <section id="projection" class="card fade-in" style="display: none;">
+        <h2 class="section-title">🚀 45-Day Strategic Projection</h2>
+        <div class="projection-content">
+          <div class="projection-overview">
+            <div class="projection-stats">
+              <div class="stat-item">
+                <span class="stat-label">Current Week</span>
+                <span class="stat-value" id="currentWeek">1</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Progress</span>
+                <span class="stat-value" id="overallProgress">0%</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Days Remaining</span>
+                <span class="stat-value" id="daysRemaining">45</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="projection-phases">
+            <h3>Phase Overview</h3>
+            <div class="phases-grid" id="phasesGrid"></div>
+          </div>
+          
+          <div class="projection-weekly">
+            <h3>Current Week Goals</h3>
+            <div class="weekly-goals" id="weeklyGoals"></div>
+          </div>
+          
+          <div class="projection-kpis">
+            <h3>KPI Targets</h3>
+            <div class="kpis-grid" id="kpisGrid"></div>
+          </div>
+        </div>
+      </section>
 
     <aside class="card sticky" id="sidebar">
         <h2 class="section-title section-title-first">⚙️ Settings & Tips</h2>
@@ -843,7 +1100,8 @@ function render(date, mode){
       <div style="margin-bottom: 1rem;">
         <button class="btn" onclick="showCalendarView()" style="margin-right: 0.5rem; margin-bottom: 0.5rem;">📅 Calendar</button>
         <button class="btn" onclick="downloadNFLSchedule()" style="margin-right: 0.5rem; margin-bottom: 0.5rem;">🏈 NFL Schedule</button>
-        <button class="btn" onclick="showScheduler()" style="margin-bottom: 0.5rem;">⏰ Schedule</button>
+        <button class="btn" onclick="showScheduler()" style="margin-right: 0.5rem; margin-bottom: 0.5rem;">⏰ Schedule</button>
+        <button class="btn" onclick="toggleProjectionView()" style="margin-bottom: 0.5rem;">🚀 45-Day Projection</button>
       </div>
       <div id="todays-schedule" style="margin-top: 1rem;">
         ${loadTodaysScheduleHTML()}
@@ -946,6 +1204,125 @@ function addTaskInteractions(){
   });
 }
 
+// ====== 45-Day Projection Functions ======
+function toggleProjectionView() {
+  const briefSection = document.getElementById('brief');
+  const projectionSection = document.getElementById('projection');
+  
+  if (projectionSection.style.display === 'none') {
+    briefSection.style.display = 'none';
+    projectionSection.style.display = 'block';
+    loadProjectionData();
+  } else {
+    briefSection.style.display = 'block';
+    projectionSection.style.display = 'none';
+  }
+}
+
+function loadProjectionData() {
+  if (!window.AeroVistaData) return;
+  
+  const projection = window.AeroVistaData.getProjection();
+  const currentWeek = projection.currentWeek;
+  const progress = window.AeroVistaData.getProjectionProgress();
+  const daysRemaining = Math.max(0, projection.totalDays - Math.floor((new Date() - projection.startDate) / (1000 * 60 * 60 * 24)));
+  
+  // Update progress bar
+  const progressBar = document.getElementById('projectionProgress');
+  const progressText = document.getElementById('projectionText');
+  if (progressBar) progressBar.style.width = `${progress}%`;
+  if (progressText) progressText.textContent = `45-Day Projection: Week ${currentWeek}`;
+  
+  // Update stats
+  document.getElementById('currentWeek').textContent = currentWeek;
+  document.getElementById('overallProgress').textContent = `${Math.round(progress)}%`;
+  document.getElementById('daysRemaining').textContent = daysRemaining;
+  
+  // Load phases
+  loadPhases(projection.phases);
+  
+  // Load weekly goals
+  loadWeeklyGoals(projection.weeklyGoals.find(week => week.week === currentWeek));
+  
+  // Load KPIs
+  loadKPIs(window.AeroVistaData.getCurrentWeekKPIs());
+}
+
+function loadPhases(phases) {
+  const phasesGrid = document.getElementById('phasesGrid');
+  if (!phasesGrid) return;
+  
+  phasesGrid.innerHTML = phases.map(phase => `
+    <div class="phase-card ${phase.status === 'in-progress' ? 'active' : ''}">
+      <div class="phase-title">${phase.name}</div>
+      <div class="phase-status ${phase.status}">${phase.status.replace('-', ' ').toUpperCase()}</div>
+      <p style="font-size: var(--text-sm); color: var(--text-secondary); margin: 0.5rem 0;">${phase.description}</p>
+      <div style="margin-top: 0.5rem;">
+        <strong>Success Metrics:</strong>
+        <ul style="margin: 0.25rem 0; padding-left: 1rem; font-size: var(--text-sm);">
+          <li>${phase.successMetrics.nodes}</li>
+          <li>${phase.successMetrics.uptime}</li>
+          <li>${phase.successMetrics.provisioning}</li>
+          <li>${phase.successMetrics.security}</li>
+        </ul>
+      </div>
+    </div>
+  `).join('');
+}
+
+function loadWeeklyGoals(weekGoals) {
+  const weeklyGoalsDiv = document.getElementById('weeklyGoals');
+  if (!weeklyGoalsDiv || !weekGoals) return;
+  
+  weeklyGoalsDiv.innerHTML = `
+    <div class="goal-category">
+      <h4>🎯 Core Objectives</h4>
+      <ul class="goal-list">
+        ${weekGoals.objectives.map(goal => `<li>${goal}</li>`).join('')}
+      </ul>
+    </div>
+    <div class="goal-category">
+      <h4>🚀 Stretch Goals</h4>
+      <ul class="goal-list">
+        ${weekGoals.stretchGoals.map(goal => `<li>${goal}</li>`).join('')}
+      </ul>
+    </div>
+  `;
+}
+
+function loadKPIs(kpis) {
+  const kpisGrid = document.getElementById('kpisGrid');
+  if (!kpisGrid) return;
+  
+  kpisGrid.innerHTML = `
+    <div class="kpi-card">
+      <div class="kpi-label">Uptime Target</div>
+      <div class="kpi-value">${kpis.uptime}%</div>
+      <div class="kpi-target">System Availability</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Response Time</div>
+      <div class="kpi-value">${kpis.responseTime}ms</div>
+      <div class="kpi-target">Average Response</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Automation</div>
+      <div class="kpi-value">${kpis.automation}%</div>
+      <div class="kpi-target">Automated Operations</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Active Users</div>
+      <div class="kpi-value">${kpis.users.toLocaleString()}</div>
+      <div class="kpi-target">Platform Users</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Revenue Target</div>
+      <div class="kpi-value">$${(kpis.revenue / 1000).toFixed(0)}K</div>
+      <div class="kpi-target">Monthly Revenue</div>
+    </div>
+  `;
+}
+
 // ====== Schedule Form Handler ======
 document.addEventListener('DOMContentLoaded', function() {
   // Schedule form handler
@@ -973,6 +1350,16 @@ document.addEventListener('DOMContentLoaded', function() {
         alert(`Error: ${result.error}`);
       }
     });
+  }
+
+  // Initialize projection progress bar
+  if (window.AeroVistaData) {
+    const progress = window.AeroVistaData.getProjectionProgress();
+    const currentWeek = window.AeroVistaData.getProjection().currentWeek;
+    const progressBar = document.getElementById('projectionProgress');
+    const progressText = document.getElementById('projectionText');
+    if (progressBar) progressBar.style.width = `${progress}%`;
+    if (progressText) progressText.textContent = `45-Day Projection: Week ${currentWeek}`;
   }
 
   // Initialize streamlined navigation

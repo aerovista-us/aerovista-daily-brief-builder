@@ -1,0 +1,489 @@
+/* Advanced Mystical Animations - Moth Wing Power */
+
+/* Shimmer effects */
+@keyframes mysticalShimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+.shimmer-effect {
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.4) 50%,
+        transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: mysticalShimmer 2s infinite;
+}
+
+/* Glow animations */
+@keyframes mysticalGlow {
+    0%, 100% {
+        box-shadow: 0 0 5px var(--mystical-glow);
+    }
+    50% {
+        box-shadow: 0 0 20px var(--mystical-glow), 0 0 30px var(--mystical-glow);
+    }
+}
+
+.glow-effect {
+    animation: mysticalGlow 3s ease-in-out infinite;
+}
+
+/* Pulse animations */
+@keyframes mysticalPulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 1;
+    }
+}
+
+.pulse-effect {
+    animation: mysticalPulse 2s ease-in-out infinite;
+}
+
+/* Float animations */
+@keyframes mysticalFloat {
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    33% {
+        transform: translateY(-10px) rotate(1deg);
+    }
+    66% {
+        transform: translateY(-5px) rotate(-1deg);
+    }
+}
+
+.float-effect {
+    animation: mysticalFloat 6s ease-in-out infinite;
+}
+
+/* Rotate animations */
+@keyframes mysticalRotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.rotate-effect {
+    animation: mysticalRotate 4s linear infinite;
+}
+
+/* Scale animations */
+@keyframes mysticalScale {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+.scale-effect {
+    animation: mysticalScale 3s ease-in-out infinite;
+}
+
+/* Slide animations */
+@keyframes mysticalSlideIn {
+    0% {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.slide-in-effect {
+    animation: mysticalSlideIn 0.8s ease-out;
+}
+
+@keyframes mysticalSlideOut {
+    0% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+.slide-out-effect {
+    animation: mysticalSlideOut 0.8s ease-in;
+}
+
+/* Fade animations */
+@keyframes mysticalFadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-effect {
+    animation: mysticalFadeIn 1s ease-out;
+}
+
+@keyframes mysticalFadeOut {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
+.fade-out-effect {
+    animation: mysticalFadeOut 1s ease-in;
+}
+
+/* Bounce animations */
+@keyframes mysticalBounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+.bounce-effect {
+    animation: mysticalBounce 2s infinite;
+}
+
+/* Wiggle animations */
+@keyframes mysticalWiggle {
+    0%, 100% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(5deg);
+    }
+    75% {
+        transform: rotate(-5deg);
+    }
+}
+
+.wiggle-effect {
+    animation: mysticalWiggle 1s ease-in-out infinite;
+}
+
+/* Shake animations */
+@keyframes mysticalShake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    10%, 30%, 50%, 70%, 90% {
+        transform: translateX(-5px);
+    }
+    20%, 40%, 60%, 80% {
+        transform: translateX(5px);
+    }
+}
+
+.shake-effect {
+    animation: mysticalShake 0.5s ease-in-out;
+}
+
+/* Morphing animations */
+@keyframes mysticalMorph {
+    0% {
+        border-radius: 50%;
+        transform: scale(1);
+    }
+    25% {
+        border-radius: 25%;
+        transform: scale(1.1);
+    }
+    50% {
+        border-radius: 10%;
+        transform: scale(1.2);
+    }
+    75% {
+        border-radius: 25%;
+        transform: scale(1.1);
+    }
+    100% {
+        border-radius: 50%;
+        transform: scale(1);
+    }
+}
+
+.morph-effect {
+    animation: mysticalMorph 4s ease-in-out infinite;
+}
+
+/* Wave animations */
+@keyframes mysticalWave {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    25% {
+        transform: translateY(-5px) rotate(2deg);
+    }
+    50% {
+        transform: translateY(0) rotate(0deg);
+    }
+    75% {
+        transform: translateY(-3px) rotate(-2deg);
+    }
+}
+
+.wave-effect {
+    animation: mysticalWave 3s ease-in-out infinite;
+}
+
+/* Spiral animations */
+@keyframes mysticalSpiral {
+    0% {
+        transform: rotate(0deg) translateX(0) translateY(0);
+    }
+    100% {
+        transform: rotate(360deg) translateX(20px) translateY(20px);
+    }
+}
+
+.spiral-effect {
+    animation: mysticalSpiral 6s linear infinite;
+}
+
+/* Breathing animations */
+@keyframes mysticalBreathe {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 1;
+    }
+}
+
+.breathe-effect {
+    animation: mysticalBreathe 4s ease-in-out infinite;
+}
+
+/* Twinkle animations */
+@keyframes mysticalTwinkle {
+    0%, 100% {
+        opacity: 0.3;
+        transform: scale(0.8);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+}
+
+.twinkle-effect {
+    animation: mysticalTwinkle 2s ease-in-out infinite;
+}
+
+/* Hover effects */
+.mystical-hover-glow:hover {
+    box-shadow: 0 0 20px var(--mystical-glow);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+}
+
+.mystical-hover-scale:hover {
+    transform: scale(1.05);
+    transition: all 0.3s ease;
+}
+
+.mystical-hover-rotate:hover {
+    transform: rotate(5deg);
+    transition: all 0.3s ease;
+}
+
+.mystical-hover-shake:hover {
+    animation: mysticalShake 0.5s ease-in-out;
+}
+
+/* Loading animations */
+@keyframes mysticalLoading {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.loading-effect {
+    animation: mysticalLoading 1s linear infinite;
+}
+
+/* Progress animations */
+@keyframes mysticalProgress {
+    0% {
+        width: 0%;
+    }
+    100% {
+        width: var(--progress-width, 100%);
+    }
+}
+
+.progress-animation {
+    animation: mysticalProgress 2s ease-out;
+}
+
+/* Text reveal animations */
+@keyframes mysticalTextReveal {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.text-reveal-effect {
+    animation: mysticalTextReveal 0.8s ease-out;
+}
+
+/* Card entrance animations */
+@keyframes mysticalCardEntrance {
+    0% {
+        opacity: 0;
+        transform: translateY(30px) scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.card-entrance-effect {
+    animation: mysticalCardEntrance 0.6s ease-out;
+}
+
+/* Button press animations */
+@keyframes mysticalButtonPress {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(0.95);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.button-press-effect {
+    animation: mysticalButtonPress 0.2s ease-in-out;
+}
+
+/* Stagger animations for multiple elements */
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
+.stagger-5 { animation-delay: 0.5s; }
+.stagger-6 { animation-delay: 0.6s; }
+.stagger-7 { animation-delay: 0.7s; }
+.stagger-8 { animation-delay: 0.8s; }
+
+/* Performance optimizations */
+.animated-element {
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .mystical-logo,
+    .mystical-tagline,
+    .mystical-icon,
+    .floating-card,
+    .mystical-progress-fill::after,
+    .shimmer-effect,
+    .glow-effect,
+    .pulse-effect,
+    .float-effect,
+    .rotate-effect,
+    .scale-effect,
+    .bounce-effect,
+    .wiggle-effect,
+    .shake-effect,
+    .morph-effect,
+    .wave-effect,
+    .spiral-effect,
+    .breathe-effect,
+    .twinkle-effect,
+    .loading-effect,
+    .progress-animation,
+    .text-reveal-effect,
+    .card-entrance-effect,
+    .button-press-effect {
+        animation: none !important;
+    }
+    
+    .mystical-hover-glow:hover,
+    .mystical-hover-scale:hover,
+    .mystical-hover-rotate:hover {
+        transform: none !important;
+        transition: none !important;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .mystical-card {
+        border: 2px solid var(--moth-primary);
+    }
+    
+    .mystical-btn {
+        border: 2px solid var(--moth-primary);
+    }
+    
+    .mystical-input {
+        border: 2px solid var(--moth-primary);
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --mystical-dust: rgba(255, 255, 255, 0.9);
+        --mystical-glow: #f4d03f;
+    }
+    
+    .mystical-card {
+        background: rgba(44, 24, 16, 0.9);
+        color: var(--moth-cream);
+    }
+    
+    .mystical-section {
+        background: rgba(44, 24, 16, 0.95);
+        color: var(--moth-cream);
+    }
+}

@@ -416,6 +416,109 @@ body{
   font-size:var(--text-xs);
 }
 
+/* Projection Tracking Styles */
+.projection-tracking{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:1.5rem;
+  height:fit-content;
+}
+
+.projection-summary{
+  display:flex;
+  flex-direction:column;
+  gap:1rem;
+}
+
+.projection-stats{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:0.5rem;
+}
+
+.projection-stats .stat-item{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:0.75rem;
+  background:var(--panel2);
+  border-radius:var(--radius);
+  border:1px solid var(--border);
+}
+
+.projection-stats .stat-label{
+  font-size:var(--text-xs);
+  color:var(--text-secondary);
+  margin-bottom:0.25rem;
+}
+
+.projection-stats .stat-value{
+  font-size:var(--text-lg);
+  font-weight:600;
+  color:var(--accent);
+}
+
+.projection-phases{
+  display:flex;
+  flex-direction:column;
+  gap:0.5rem;
+}
+
+.phase-item{
+  display:flex;
+  align-items:center;
+  gap:0.5rem;
+  padding:0.5rem;
+  background:var(--panel2);
+  border-radius:var(--radius);
+  border:1px solid var(--border);
+  font-size:var(--text-sm);
+}
+
+.phase-item.active{
+  border-color:var(--accent2);
+  background:var(--panel3);
+}
+
+.phase-item.completed{
+  border-color:var(--success);
+  background:rgba(63, 185, 80, 0.1);
+}
+
+.phase-item.pending{
+  opacity:0.6;
+}
+
+.phase-status{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  flex-shrink:0;
+}
+
+.phase-status.in-progress{
+  background:var(--accent);
+}
+
+.phase-status.completed{
+  background:var(--success);
+}
+
+.phase-status.pending{
+  background:var(--muted);
+}
+
+.phase-name{
+  flex:1;
+  color:var(--text);
+}
+
+.phase-week{
+  font-size:var(--text-xs);
+  color:var(--text-secondary);
+}
+
 /* Stats Cards */
 .stats-grid{
   display:grid;
@@ -693,6 +796,30 @@ body{
           <!-- Activity items will be dynamically loaded here -->
         </div>
       </aside>
+
+      <!-- 45-Day Projection Tracking -->
+      <aside class="projection-tracking">
+        <h3 style="color:var(--text);margin-bottom:1rem;font-size:var(--text-lg);font-weight:600">🚀 45-Day Projection</h3>
+        <div class="projection-summary">
+          <div class="projection-stats">
+            <div class="stat-item">
+              <span class="stat-label">Current Week</span>
+              <span class="stat-value" id="projectionCurrentWeek">1</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Progress</span>
+              <span class="stat-value" id="projectionProgress">0%</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Days Left</span>
+              <span class="stat-value" id="projectionDaysLeft">45</span>
+            </div>
+          </div>
+          <div class="projection-phases" id="projectionPhases">
+            <!-- Phases will be loaded here -->
+          </div>
+        </div>
+      </aside>
     </div>
   </div>
 
@@ -715,8 +842,9 @@ body{
         this.bindEvents();
         this.renderTasks();
         this.renderStats();
-        this.renderActivities();
-        this.startAutoRefresh();
+        this.      renderActivities();
+      this.renderProjection();
+      this.startAutoRefresh();
       }
 
       bindEvents() {
@@ -976,6 +1104,32 @@ body{
           timestamp: new Date().toISOString()
         });
         this.saveActivities();
+      }
+
+      renderProjection() {
+        if (!window.AeroVistaData) return;
+        
+        const projection = window.AeroVistaData.getProjection();
+        const currentWeek = projection.currentWeek;
+        const progress = window.AeroVistaData.getProjectionProgress();
+        const daysRemaining = Math.max(0, projection.totalDays - Math.floor((new Date() - projection.startDate) / (1000 * 60 * 60 * 24)));
+        
+        // Update projection stats
+        document.getElementById('projectionCurrentWeek').textContent = currentWeek;
+        document.getElementById('projectionProgress').textContent = `${Math.round(progress)}%`;
+        document.getElementById('projectionDaysLeft').textContent = daysRemaining;
+        
+        // Load phases
+        const phasesContainer = document.getElementById('projectionPhases');
+        if (phasesContainer) {
+          phasesContainer.innerHTML = projection.phases.map(phase => `
+            <div class="phase-item ${phase.status === 'in-progress' ? 'active' : phase.status === 'completed' ? 'completed' : 'pending'}">
+              <div class="phase-status ${phase.status}"></div>
+              <div class="phase-name">${phase.name}</div>
+              <div class="phase-week">Week ${phase.startWeek}-${phase.endWeek}</div>
+            </div>
+          `).join('');
+        }
       }
 
       showNotification(message, type = 'info') {
