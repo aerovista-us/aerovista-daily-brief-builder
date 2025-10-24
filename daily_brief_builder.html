@@ -772,7 +772,7 @@ ul.clean li:last-child{
               <div class="progress-fill" id="projectionProgress"></div>
             </div>
             <span class="progress-text" id="projectionText">45-Day Projection: Week 1</span>
-          </div>
+    </div>
     <div class="controls">
           <input id="date" type="date" class="input" title="Select date for brief">
           <select id="mode" class="select" title="Choose brief mode">
@@ -904,14 +904,16 @@ ul.clean li:last-child{
   <script src="navigation-utils.js"></script>
 <script>
 // ====== Use Shared Data Manager ======
-const DATA = window.AeroVistaData.data;
-const STATE = window.AeroVistaData.data.tasks.reduce((acc, task) => {
-  acc[task.id] = {
-    done: task.status === 'completed',
-    lastTouched: new Date(task.updatedAt).getTime()
-  };
-  return acc;
-}, {});
+const DATA = window.AeroVistaData ? window.AeroVistaData.data : null;
+const STATE = window.AeroVistaData && window.AeroVistaData.data && window.AeroVistaData.data.tasks 
+  ? window.AeroVistaData.data.tasks.reduce((acc, task) => {
+      acc[task.id] = {
+        done: task.status === 'completed',
+        lastTouched: new Date(task.updatedAt).getTime()
+      };
+      return acc;
+    }, {})
+  : {};
 
 function save(){ 
   // Data is automatically saved by the shared manager
@@ -927,7 +929,7 @@ function markTouched(id){
   ensure(id); 
   STATE[id].lastTouched = Date.now(); 
   // Update the task in shared data
-  const task = DATA.tasks.find(t => t.id === id);
+  const task = DATA && DATA.tasks ? DATA.tasks.find(t => t.id === id) : null;
   if (task) {
     window.AeroVistaData.updateTask(id, { updatedAt: new Date().toISOString() });
   }
@@ -956,7 +958,7 @@ function showScheduler() {
   
   // Populate task select
   taskSelect.innerHTML = '<option value="">Choose a task to schedule...</option>' +
-    DATA.tasks.filter(task => task.status !== 'completed').map(task => 
+    (DATA && DATA.tasks ? DATA.tasks.filter(task => task.status !== 'completed') : []).map(task => 
       `<option value="${task.id}">${task.title}</option>`
     ).join('');
   
@@ -976,7 +978,7 @@ function loadTodaysScheduleHTML() {
   return schedule.map(block => {
     const startTime = new Date(block.startTime);
     const endTime = new Date(startTime.getTime() + block.duration * 60 * 1000);
-    const task = DATA.tasks.find(t => t.id === block.taskId);
+    const task = DATA && DATA.tasks ? DATA.tasks.find(t => t.id === block.taskId) : null;
     
     return `
       <div class="small" style="margin-bottom: 0.5rem; padding: 0.5rem; background: var(--panel2); border-radius: 4px;">
@@ -1049,23 +1051,49 @@ function makeItem(it){
 }
 function noMovementAlerts(thresholdHrs){
   // Use shared data manager for consistent alerts
+  if (!window.AeroVistaData) {
+    return ['<li>Loading alerts...</li>'];
+  }
+  
   const alerts = window.AeroVistaData.getNoMovementAlerts(thresholdHrs);
+  if (!alerts || !Array.isArray(alerts)) {
+    return ['<li>No alerts available</li>'];
+  }
+  
   return alerts.slice(0,5).map(it=>`<li><b>${it.title}</b> — smallest step: ${tinyMove(it)}</li>`);
 }
 function quickWins(){
   // Use shared data manager for consistent quick wins
+  if (!window.AeroVistaData) {
+    return ['<li>Loading quick wins...</li>'];
+  }
+  
   const qs = window.AeroVistaData.getQuickWins();
+  if (!qs || !Array.isArray(qs)) {
+    return ['<li>No quick wins available</li>'];
+  }
+  
   const top = pickTop5()[0]; 
   if(top) qs.unshift(`Do tiny first move for <b>${top.title}</b>.`);
   return qs.slice(0,5).map(x=>`<li>${x}</li>`);
 }
 function calendarWorthy(){
   // Use shared data manager for consistent calendar items
-  return window.AeroVistaData.getCalendarWorthy();
+  if (!window.AeroVistaData) {
+    return '<li>Loading calendar items...</li>';
+  }
+  
+  const items = window.AeroVistaData.getCalendarWorthy();
+  return items || '<li>No calendar items available</li>';
 }
 function motivation(mode){
   // Use shared data manager for consistent motivation
-  return window.AeroVistaData.getMotivation(mode);
+  if (!window.AeroVistaData) {
+    return "Loading motivation...";
+  }
+  
+  const msg = window.AeroVistaData.getMotivation(mode);
+  return msg || "You've got this! 💪";
 }
 
 // ====== Render ======
@@ -1108,13 +1136,13 @@ function render(date, mode){
       </div>
       <hr class="sep">
       <h3 class="section-title">🚩 Risks / Watchlist</h3>
-      <ul class="clean">${DATA.risks.map(risk => `<li>${risk}</li>`).join('')}</ul>
+      <ul class="clean">${DATA && DATA.risks ? DATA.risks.map(risk => `<li>${risk}</li>`).join('') : '<li>Loading risks...</li>'}</ul>
       <hr class="sep">
       <h3 class="section-title">🎯 Suggested Focus (Next 24h)</h3>
-      <ul class="clean">${DATA.focus.map(focus => `<li>${focus}</li>`).join('')}</ul>
+      <ul class="clean">${DATA && DATA.focus ? DATA.focus.map(focus => `<li>${focus}</li>`).join('') : '<li>Loading focus items...</li>'}</ul>
       <hr class="sep">
       <div class="small"><strong>📝 Heartfelt note (copy/paste):</strong></div>
-      <div class="note">${DATA.heartfelt}</div>
+      <div class="note">${DATA && DATA.heartfelt ? DATA.heartfelt : 'Loading heartfelt note...'}</div>
       <hr class="sep">
       <div class="kicker">Built for AeroVista • Fully offline • LocalStorage only</div>
     `;
@@ -1139,7 +1167,9 @@ function render(date, mode){
     `;
   } else {
     const completed = Object.entries(STATE).filter(([id,s])=>s.done).slice(-5).map(([id,s])=>{
-      const it = DATA.sections.flatMap(s=>s.items).find(x=>x.id===id);
+      const it = DATA.sections && Array.isArray(DATA.sections) 
+        ? DATA.sections.flatMap(s=>s.items).find(x=>x.id===id)
+        : null;
       return `<li><strong>${it?it.title:id}</strong> — completed ✅</li>`;
     });
     const carry = pickTop5().slice(0,3).map(it=>`<li><strong>${it.title}</strong> — first next step: ${tinyMove(it)}</li>`);
@@ -1191,10 +1221,12 @@ function addTaskInteractions(){
     if(e.target.closest('.item')){
       const item = e.target.closest('.item');
       const title = item.querySelector('h3').textContent.replace(/^[🔥⚡📋✅]\s*/, '');
-      const taskId = Object.keys(DATA.sections.flatMap(s => s.items)).find(id => {
+      const taskId = DATA.sections && Array.isArray(DATA.sections) 
+        ? Object.keys(DATA.sections.flatMap(s => s.items)).find(id => {
         const task = DATA.sections.flatMap(s => s.items).find(t => t.title === title);
         return task ? task.id : null;
-      });
+          })
+        : null;
       
       if(taskId && confirm(`Mark "${title}" as completed?`)){
         markDone(taskId, true);
