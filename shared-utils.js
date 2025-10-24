@@ -104,6 +104,61 @@ class AeroVistaDataManager {
           updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
           completedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
         },
+        {
+          id: 'nxcore-phase-a',
+          title: 'NXCore Phase A — Infrastructure Security',
+          description: 'Firewall + Fail2ban enabled, all .env files encrypted with sops, TLS validation confirmed',
+          priority: 'high',
+          tags: ['time', 'unblock'],
+          status: 'completed',
+          createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+          updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+          completedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
+        },
+        {
+          id: 'nxcore-monitoring',
+          title: 'NXCore Monitoring Stack Deployment',
+          description: 'Prometheus + Loki + Grafana + Alertmanager deployed and reachable',
+          priority: 'high',
+          tags: ['time', 'unblock'],
+          status: 'completed',
+          createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+          updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+          completedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
+        },
+        {
+          id: 'echoverse-transfer-complete',
+          title: 'EchoVerse Music Transfer — Complete',
+          description: 'NXCore → Extreme SSD ingestion workflow complete, music safely replicated to /srv/media2/EchoVerse_Music',
+          priority: 'medium',
+          tags: ['time', 'money'],
+          status: 'completed',
+          createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+          updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+          completedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
+        },
+        {
+          id: 'moth-emporium-poc',
+          title: 'Moth Emporium — Proof of Concept Storefront',
+          description: 'Full Next.js + Tailwind storefront ready, including marketing and content-engine report',
+          priority: 'medium',
+          tags: ['money'],
+          status: 'completed',
+          createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+          updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+          completedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
+        },
+        {
+          id: 'avmini-prep',
+          title: 'AVmini PC — Hardware Preparation',
+          description: 'OptiPlex class collaborator node prepared, OS validated, firmware patched',
+          priority: 'medium',
+          tags: ['unblock'],
+          status: 'completed',
+          createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+          updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+          completedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
+        },
         
         // ▶️ IN PROGRESS (Active)
         {
@@ -117,13 +172,13 @@ class AeroVistaDataManager {
           updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
         },
         {
-          id: 'nxcore-system',
-          title: 'NXCore System Overview & Hub',
-          description: 'Central private-cloud control center connecting all divisions via zero-trust, containerized networking',
+          id: 'nxcore-phase-b',
+          title: 'NXCore Phase B — System Enhancement',
+          description: 'Observability dashboards under refinement; integrating REST API endpoints for health monitoring',
           priority: 'high',
-          tags: ['time', 'money', 'unblock'],
+          tags: ['time', 'unblock'],
           status: 'in-progress',
-          createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+          createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
           updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
         },
         {
@@ -137,23 +192,23 @@ class AeroVistaDataManager {
           updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
         },
         {
-          id: 'echoverse-transfer',
-          title: 'EchoVerse Music Transfer',
-          description: 'Transfer script to copy EchoVerse_Music from Extreme SSD to NXCore media storage with checksum verification',
+          id: 'echoverse-verify',
+          title: 'EchoVerse Music — Checksum Verification',
+          description: 'Execute checksum verify run (VERIFY=true) to confirm data integrity on media ingest log',
           priority: 'medium',
           tags: ['time', 'money'],
           status: 'in-progress',
-          createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+          createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
           updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
         },
         {
-          id: 'moth-emporium',
-          title: 'Moth Emporium — Gel Nails Dropshipping',
-          description: 'Art-forward pre-painted gel nails line with 8-12 SKUs, 60-70% margin targets, hybrid supply chain',
+          id: 'moth-emporium-launch',
+          title: 'Moth Emporium — Creator Launch & Marketing',
+          description: 'Product page assets and video content prepping, Marketing Week 1-4 rollout schedule initiated',
           priority: 'medium',
           tags: ['money'],
           status: 'in-progress',
-          createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+          createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
           updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
         },
         {
@@ -167,9 +222,9 @@ class AeroVistaDataManager {
           updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
         },
         {
-          id: 'avmini-setup',
-          title: 'AVmini PC — Collaborator Setup',
-          description: 'Hardware prepared as first collaborator workstation with Tailscale, Docker, GitHub Desktop, VS Code, Node.js LTS',
+          id: 'avmini-software',
+          title: 'AVmini PC — Software Stack Setup',
+          description: 'GitHub Desktop, Docker Compose, Tailscale, VS Code, and NXCore CLI tools setup pending',
           priority: 'medium',
           tags: ['unblock'],
           status: 'in-progress',
@@ -254,6 +309,66 @@ class AeroVistaDataManager {
           description: 'Finalize brand system (SVG logos, color tokens, typography, icon suite, OG templates) for web integration',
           priority: 'medium',
           tags: ['time', 'money'],
+          status: 'pending',
+          createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+          updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
+        },
+        {
+          id: 'nxcore-phase-c',
+          title: 'NXCore Phase C — PC Provisioning',
+          description: 'Early work on PC provisioning (Linux/Windows) and heartbeat system',
+          priority: 'high',
+          tags: ['time', 'unblock'],
+          status: 'pending',
+          createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+          updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
+        },
+        {
+          id: 'nxcore-phase-d',
+          title: 'NXCore Phase D — CI Integration',
+          description: 'CI integration + security backup config in staging',
+          priority: 'high',
+          tags: ['time', 'unblock'],
+          status: 'pending',
+          createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+          updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
+        },
+        {
+          id: 'firebase-functions-gen2',
+          title: 'Firebase Functions Gen-2 Deployment',
+          description: 'Deploy Firebase Functions (Gen-2) on aerovista-site',
+          priority: 'high',
+          tags: ['time', 'money'],
+          status: 'pending',
+          createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+          updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
+        },
+        {
+          id: 'rydesync-proxy-testing',
+          title: 'RydeSync Reverse-Proxy Decision Testing',
+          description: 'Begin RydeSync reverse-proxy decision testing',
+          priority: 'high',
+          tags: ['time', 'money'],
+          status: 'pending',
+          createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+          updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
+        },
+        {
+          id: 'daily-brief-json-export',
+          title: 'Daily Brief JSON Export & Backup',
+          description: 'Draft internal report export from Daily Brief to JSON for backup',
+          priority: 'medium',
+          tags: ['time'],
+          status: 'pending',
+          createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+          updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
+        },
+        {
+          id: 'moth-emporium-etsy',
+          title: 'Moth Emporium — Etsy Listing & Pricing',
+          description: 'Resume branding content for Moth Emporium (Etsy listing mockup + pricing)',
+          priority: 'medium',
+          tags: ['money'],
           status: 'pending',
           createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
           updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
@@ -500,6 +615,54 @@ class AeroVistaDataManager {
           type: 'alert',
           message: 'n8n Automation: Docker Compose stack and HTTPS setup pending',
           timestamp: new Date().toISOString()
+        },
+        {
+          id: 'activity-19',
+          type: 'completed',
+          message: 'NXCore Phase A: Firewall + Fail2ban enabled, all .env files encrypted with sops',
+          timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
+        },
+        {
+          id: 'activity-20',
+          type: 'completed',
+          message: 'NXCore Monitoring: Prometheus + Loki + Grafana + Alertmanager deployed and reachable',
+          timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
+        },
+        {
+          id: 'activity-21',
+          type: 'completed',
+          message: 'EchoVerse Music Transfer: NXCore → Extreme SSD ingestion workflow complete',
+          timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
+        },
+        {
+          id: 'activity-22',
+          type: 'completed',
+          message: 'Moth Emporium PoC: Full Next.js + Tailwind storefront ready with marketing plan',
+          timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
+        },
+        {
+          id: 'activity-23',
+          type: 'completed',
+          message: 'AVmini PC: Hardware preparation complete, OS validated, firmware patched',
+          timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
+        },
+        {
+          id: 'activity-24',
+          type: 'progress',
+          message: 'NXCore Phase B: Observability dashboards under refinement, REST API endpoints integration',
+          timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
+        },
+        {
+          id: 'activity-25',
+          type: 'progress',
+          message: 'Moth Emporium Launch: Product page assets and video content prepping, Marketing Week 1-4 rollout initiated',
+          timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
+        },
+        {
+          id: 'activity-26',
+          type: 'alert',
+          message: 'Tomorrow Kick-Off (Oct 24): Finalize AVmini software stack, deploy Firebase Functions Gen-2, begin RydeSync proxy testing',
+          timestamp: new Date().toISOString()
         }
       ],
       settings: {
@@ -518,12 +681,12 @@ class AeroVistaDataManager {
         'Portfolio consolidation requires careful version merging to avoid breaking existing functionality'
       ],
       focus: [
-        // Today's Top 5 – Sun Oct 5, 2025 (08:00 PT) - Updated with 123/ directory projects
-        'Gray-to-Green image set: pick 6 starter photos; export 2 mock composites; prep palette shortlist',
-        'NXCore system: complete Traefik middleware patch; implement Prometheus/Loki/Grafana observability',
-        'AeroVista Web: approve billing layout + Firebase Auth setup; deploy Functions Gen-2',
-        'RydeSync-Next: decide routing (link-out vs reverse-proxy); approve Redis tier and budget thresholds',
-        'Portfolio consolidation: merge AeroDash versions; complete RydeSync cutover; standardize naming'
+        // Today's Top 5 – Oct 24, 2025 (Start-of-Shift) - Updated with latest 30-hour report
+        'AVmini software stack: Finalize GitHub Desktop, Docker Compose, Tailscale, VS Code, NXCore CLI tools',
+        'NXCore Phase B→C handoff: Start orchestration pipeline for PC provisioning and heartbeat system',
+        'Firebase Functions Gen-2: Deploy on aerovista-site with central Auth and domain claim verification',
+        'RydeSync reverse-proxy testing: Begin decision testing for routing (reverse-proxy vs link-out)',
+        'EchoVerse Music checksum verify: Execute VERIFY=true run to confirm data integrity on media ingest log'
       ],
       heartfelt: "To everyone who picked up the phone with us—agents, leaders, friends: thank you. We built something real in the space between holds and hellos. This page is a little sunset for a big chapter. Hit play, remember the laughs, the grit, and the wins—and carry it forward. You mattered here. You still do."
     };
@@ -820,15 +983,15 @@ class AeroVistaDataManager {
   // Get quick wins
   getQuickWins() {
     return [
-      'Start PC secure wipe (runs unattended)',
-      'Register TV warranty + upload receipt (≤10 min)',
-      'Pick 6 Gray-to-Green photos to lock direction',
-      'Export basic NFL .ics from last schedule template',
-      'Drop hero art on Jeanie page and verify OG/Twitter cards',
+      'Finalize AVmini software stack and test Tailscale join (≤30 min)',
+      'Execute EchoVerse Music checksum verify run (VERIFY=true) (≤15 min)',
+      'Deploy Firebase Functions Gen-2 on aerovista-site (≤20 min)',
+      'Begin RydeSync reverse-proxy decision testing (≤30 min)',
+      'Draft Daily Brief JSON export for backup (≤10 min)',
+      'Resume Moth Emporium Etsy listing mockup + pricing (≤45 min)',
+      'Start NXCore Phase B→C handoff for orchestration pipeline (≤30 min)',
       'Review NXCore Service Registry JSON schema and update service entries',
-      'Test EchoVerse Music Transfer script with sample files',
       'Finalize Orbit logo exports for UHD transparent variants',
-      'Set up AVmini PC with Tailscale and Docker for collaborator access',
       'Create Moth Emporium Etsy POC with first 3 SKU listings'
     ];
   }
@@ -836,16 +999,16 @@ class AeroVistaDataManager {
   // Get calendar-worthy deadlines
   getCalendarWorthy() {
     return [
-      "<li><b>Gray-to-Green photos</b>: pick 6 starter photos <b>today</b>.</li>",
-      "<li><b>TV warranty</b>: register warranty <b>within 30 days</b>.</li>",
-      "<li><b>Jeanie Birthday page</b>: drop hero art <b>this week</b>.</li>",
-      "<li><b>NFL season .ics</b>: generate calendar <b>before next game</b>.</li>",
-      "<li><b>PC SOP</b>: kick off secure wipe <b>today</b>.</li>",
-      "<li><b>NXCore repair</b>: complete Traefik middleware patch <b>this week</b>.</li>",
-      "<li><b>AeroVista Web billing</b>: approve org/folder layout <b>by Tuesday</b>.</li>",
-      "<li><b>RydeSync routing</b>: decide link-out vs reverse-proxy <b>by Wednesday</b>.</li>",
-      "<li><b>n8n automation</b>: finalize Docker Compose stack <b>this week</b>.</li>",
-      "<li><b>EchoVerse transfer</b>: run migration script <b>when ready</b>.</li>"
+      "<li><b>AVmini software stack</b>: finalize and test Tailscale join <b>today</b>.</li>",
+      "<li><b>Firebase Functions Gen-2</b>: deploy on aerovista-site <b>today</b>.</li>",
+      "<li><b>RydeSync reverse-proxy testing</b>: begin decision testing <b>today</b>.</li>",
+      "<li><b>EchoVerse Music checksum verify</b>: execute VERIFY=true run <b>today</b>.</li>",
+      "<li><b>NXCore Phase B→C handoff</b>: start orchestration pipeline <b>today</b>.</li>",
+      "<li><b>Daily Brief JSON export</b>: draft internal report export <b>today</b>.</li>",
+      "<li><b>Moth Emporium Etsy</b>: resume branding content and pricing <b>this week</b>.</li>",
+      "<li><b>NXCore Phase C</b>: PC provisioning and heartbeat system <b>next 2 weeks</b>.</li>",
+      "<li><b>NXCore Phase D</b>: CI integration + security backup config <b>next week</b>.</li>",
+      "<li><b>TV warranty</b>: register warranty <b>within 30 days</b>.</li>"
     ].join('');
   }
 
