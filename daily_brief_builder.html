@@ -1394,6 +1394,14 @@ document.addEventListener('DOMContentLoaded', function() {
     if (progressText) progressText.textContent = `45-Day Projection: Week ${currentWeek}`;
   }
 
+  // Initialize with morning brief
+  const today = new Date();
+  const currentHour = today.getHours();
+  const autoMode = currentHour < 12 ? 'morning' : currentHour < 17 ? 'midday' : 'night';
+  document.getElementById('mode').value = autoMode;
+  document.getElementById('date').value = today.toISOString().slice(0, 10);
+  render(today, autoMode);
+
   // Initialize streamlined navigation
   if (window.AeroVistaNav) {
     window.AeroVistaNav.init();
