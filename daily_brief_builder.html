@@ -1000,17 +1000,35 @@ function badgeHTML(tags){
   }).join('');
 }
 function weight(it, secId){
-  let s=0; if(it.tags.includes('time')) s+=3; if(it.tags.includes('money')) s+=2; if(it.tags.includes('unblock')) s+=1;
+  if (!it) return 0;
+  
+  let s=0; 
+  if(it.tags && it.tags.includes('time')) s+=3; 
+  if(it.tags && it.tags.includes('money')) s+=2; 
+  if(it.tags && it.tags.includes('unblock')) s+=1;
   if(secId==='now') s+=2; else if(secId==='next') s+=1;
   if(STATE[it.id]?.done) s-=5;
   return s;
 }
 function pickTop5(){
   // Use shared data manager for consistent task prioritization
-  return window.AeroVistaData.getTopTasks(5);
+  if (!window.AeroVistaData) {
+    console.log('AeroVistaData not available');
+    return [];
+  }
+  
+  const tasks = window.AeroVistaData.getTopTasks(5);
+  console.log('Top 5 tasks:', tasks);
+  return tasks;
 }
 function tinyMove(it){ return it.tiny || "Write the smallest next step and do it in 5 minutes."; }
 function makeItem(it){
+  console.log('makeItem called with:', it);
+  if (!it) {
+    console.log('makeItem: item is null/undefined');
+    return '';
+  }
+  
   const priority = weight(it, 'now');
   let statusIcon = '📋';
   let statusClass = 'low';
@@ -1104,7 +1122,11 @@ function render(date, mode){
   const timeContext = currentHour < 12 ? 'morning' : currentHour < 17 ? 'afternoon' : 'evening';
   
   if(mode==='morning'){
-    const top = pickTop5().map(makeItem).join('');
+    console.log('Rendering morning report');
+    const topTasks = pickTop5();
+    console.log('Top tasks from pickTop5:', topTasks);
+    const top = topTasks.map(makeItem).join('');
+    console.log('Top items HTML:', top);
     const alerts = noMovementAlerts(48);
     const alertCount = alerts.length;
     
@@ -1393,14 +1415,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (progressBar) progressBar.style.width = `${progress}%`;
     if (progressText) progressText.textContent = `45-Day Projection: Week ${currentWeek}`;
   }
-
-  // Initialize with morning brief
-  const today = new Date();
-  const currentHour = today.getHours();
-  const autoMode = currentHour < 12 ? 'morning' : currentHour < 17 ? 'midday' : 'night';
-  document.getElementById('mode').value = autoMode;
-  document.getElementById('date').value = today.toISOString().slice(0, 10);
-  render(today, autoMode);
 
   // Initialize streamlined navigation
   if (window.AeroVistaNav) {
