@@ -324,46 +324,6 @@ class AeroVistaDataManager {
           updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
         },
         {
-          id: 'n8n-self-hosted-deployment',
-          title: 'n8n Self-Hosted Deployment (P1)',
-          description: 'Deploy n8n automation stack on call-center Linux server with Docker Compose, HTTPS, and monitoring',
-          priority: 'high',
-          tags: ['time', 'unblock', 'money'],
-          status: 'pending',
-          createdAt: new Date(Date.now() - 18 * 24 * 60 * 60 * 1000).toISOString(),
-          updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
-        },
-        {
-          id: 'nxcore-routing-cleanup',
-          title: 'NXCore Routing & Middleware Cleanup',
-          description: 'Fix Traefik StripPrefix issue and credential rotation (Grafana, n8n, Authelia)',
-          priority: 'high',
-          tags: ['time', 'unblock'],
-          status: 'pending',
-          createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-          updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
-        },
-        {
-          id: 'authelia-sso-fix',
-          title: 'Authelia SSO Integration',
-          description: 'Fix Authelia blank-page rendering and SSO alignment with cert chain',
-          priority: 'high',
-          tags: ['time', 'unblock'],
-          status: 'pending',
-          createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-          updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
-        },
-        {
-          id: 'redis-rydesync-budget',
-          title: 'Redis RydeSync Budget Approval',
-          description: 'Get Redis tier budget approved for RydeSync integration and routing decision',
-          priority: 'high',
-          tags: ['money', 'unblock'],
-          status: 'pending',
-          createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-          updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
-        },
-        {
           id: 'nxcore-phase-d',
           title: 'NXCore Phase D — CI Integration',
           description: 'CI integration + security backup config in staging',
@@ -721,12 +681,12 @@ class AeroVistaDataManager {
         'Portfolio consolidation requires careful version merging to avoid breaking existing functionality'
       ],
       focus: [
-        // Today's Top 5 – Oct 24, 2025 (Start-of-Shift) - Updated with comprehensive status report
-        'n8n Self-Hosted Deployment (P1): Deploy automation stack on call-center Linux server with Docker Compose, HTTPS, and monitoring',
-        'NXCore Routing & Middleware Cleanup: Fix Traefik StripPrefix issue and credential rotation (Grafana, n8n, Authelia)',
-        'Authelia SSO Integration: Fix blank-page rendering and SSO alignment with cert chain',
-        'Redis RydeSync Budget Approval: Get Redis tier budget approved for RydeSync integration and routing decision',
-        'NXCore Phase B→C handoff: Start orchestration pipeline for PC provisioning and heartbeat system'
+        // Today's Top 5 – Oct 24, 2025 (Start-of-Shift) - Updated with latest 30-hour report
+        'AVmini software stack: Finalize GitHub Desktop, Docker Compose, Tailscale, VS Code, NXCore CLI tools',
+        'NXCore Phase B→C handoff: Start orchestration pipeline for PC provisioning and heartbeat system',
+        'Firebase Functions Gen-2: Deploy on aerovista-site with central Auth and domain claim verification',
+        'RydeSync reverse-proxy testing: Begin decision testing for routing (reverse-proxy vs link-out)',
+        'EchoVerse Music checksum verify: Execute VERIFY=true run to confirm data integrity on media ingest log'
       ],
       heartfelt: "To everyone who picked up the phone with us—agents, leaders, friends: thank you. We built something real in the space between holds and hellos. This page is a little sunset for a big chapter. Hit play, remember the laughs, the grit, and the wins—and carry it forward. You mattered here. You still do.",
       
@@ -1254,14 +1214,25 @@ class AeroVistaDataManager {
 
   // Get top priority tasks
   getTopTasks(limit = 5) {
-    return this.data.tasks
-      .filter(t => t.status !== 'completed')
-      .sort((a, b) => this.getTaskPriority(b) - this.getTaskPriority(a))
-      .slice(0, limit);
+    console.log('getTopTasks called with limit:', limit);
+    console.log('Available tasks:', this.data.tasks);
+    
+    const filteredTasks = this.data.tasks.filter(t => t.status !== 'completed');
+    console.log('Filtered tasks (non-completed):', filteredTasks);
+    
+    const sortedTasks = filteredTasks.sort((a, b) => this.getTaskPriority(b) - this.getTaskPriority(a));
+    console.log('Sorted tasks:', sortedTasks);
+    
+    const topTasks = sortedTasks.slice(0, limit);
+    console.log('Top tasks (final):', topTasks);
+    
+    return topTasks;
   }
 
   // Calculate task priority score
   getTaskPriority(task) {
+    if (!task) return 0;
+    
     let priority = 0;
     
     // Priority weight
@@ -1269,9 +1240,11 @@ class AeroVistaDataManager {
     priority += priorityWeights[task.priority] || 1;
     
     // Tag weights
-    if (task.tags.includes('time')) priority += 2;
-    if (task.tags.includes('money')) priority += 2;
-    if (task.tags.includes('unblock')) priority += 1;
+    if (task.tags && Array.isArray(task.tags)) {
+      if (task.tags.includes('time')) priority += 2;
+      if (task.tags.includes('money')) priority += 2;
+      if (task.tags.includes('unblock')) priority += 1;
+    }
     
     // Status weight
     const statusWeights = { 'in-progress': 2, 'pending': 1, 'backlog': 0 };
@@ -1307,32 +1280,32 @@ class AeroVistaDataManager {
   // Get quick wins
   getQuickWins() {
     return [
-      'n8n deployment: Finalize install pack and deploy Docker Compose stack (≤45 min)',
-      'NXCore routing: Fix Traefik StripPrefix issue and test routing (≤30 min)',
-      'Authelia SSO: Debug blank-page rendering and test SSO flow (≤20 min)',
-      'Redis budget: Draft budget proposal for RydeSync Redis tier (≤15 min)',
-      'AVmini setup: Finalize software stack and test Tailscale join (≤30 min)',
-      'EchoVerse Music: Execute checksum verify run (VERIFY=true) (≤15 min)',
-      'Firebase Functions: Deploy Gen-2 on aerovista-site (≤20 min)',
-      'RydeSync testing: Begin reverse-proxy decision testing (≤30 min)',
-      'Daily Brief JSON: Draft internal report export for backup (≤10 min)',
-      'Moth Emporium: Resume Etsy listing mockup + pricing (≤45 min)'
+      'Finalize AVmini software stack and test Tailscale join (≤30 min)',
+      'Execute EchoVerse Music checksum verify run (VERIFY=true) (≤15 min)',
+      'Deploy Firebase Functions Gen-2 on aerovista-site (≤20 min)',
+      'Begin RydeSync reverse-proxy decision testing (≤30 min)',
+      'Draft Daily Brief JSON export for backup (≤10 min)',
+      'Resume Moth Emporium Etsy listing mockup + pricing (≤45 min)',
+      'Start NXCore Phase B→C handoff for orchestration pipeline (≤30 min)',
+      'Review NXCore Service Registry JSON schema and update service entries',
+      'Finalize Orbit logo exports for UHD transparent variants',
+      'Create Moth Emporium Etsy POC with first 3 SKU listings'
     ];
   }
 
   // Get calendar-worthy deadlines
   getCalendarWorthy() {
     return [
-      "<li><b>n8n Self-Hosted Deployment (P1)</b>: deploy automation stack <b>today</b>.</li>",
-      "<li><b>NXCore Routing Cleanup</b>: fix Traefik StripPrefix issue <b>today</b>.</li>",
-      "<li><b>Authelia SSO Integration</b>: fix blank-page rendering <b>today</b>.</li>",
-      "<li><b>Redis RydeSync Budget</b>: get budget approval <b>this week</b>.</li>",
       "<li><b>AVmini software stack</b>: finalize and test Tailscale join <b>today</b>.</li>",
-      "<li><b>EchoVerse Music checksum verify</b>: execute VERIFY=true run <b>today</b>.</li>",
       "<li><b>Firebase Functions Gen-2</b>: deploy on aerovista-site <b>today</b>.</li>",
       "<li><b>RydeSync reverse-proxy testing</b>: begin decision testing <b>today</b>.</li>",
+      "<li><b>EchoVerse Music checksum verify</b>: execute VERIFY=true run <b>today</b>.</li>",
       "<li><b>NXCore Phase B→C handoff</b>: start orchestration pipeline <b>today</b>.</li>",
-      "<li><b>Daily Brief JSON export</b>: draft internal report export <b>today</b>.</li>"
+      "<li><b>Daily Brief JSON export</b>: draft internal report export <b>today</b>.</li>",
+      "<li><b>Moth Emporium Etsy</b>: resume branding content and pricing <b>this week</b>.</li>",
+      "<li><b>NXCore Phase C</b>: PC provisioning and heartbeat system <b>next 2 weeks</b>.</li>",
+      "<li><b>NXCore Phase D</b>: CI integration + security backup config <b>next week</b>.</li>",
+      "<li><b>TV warranty</b>: register warranty <b>within 30 days</b>.</li>"
     ].join('');
   }
 
